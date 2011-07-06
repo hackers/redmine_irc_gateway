@@ -1,0 +1,4 @@
+# rig.gems generated gem export file. Note that any env variable settings will be missing. Append these after using a ';' field separator
+net-http-digest_auth -v1.1.1
+net-http-persistent -v1.8
+net-irc -v0.0.9
