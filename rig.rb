@@ -34,7 +34,8 @@ class RedmineIrcGateway < Net::IRC::Server::Session
     @opts ||= []
 
     m.params[0] = "##{server_name}"
-    on_join(m)
+		users = ["@#{server_name}"]
+    on_join(m, users)
   end
 
   # logout from server
@@ -49,14 +50,13 @@ class RedmineIrcGateway < Net::IRC::Server::Session
   end
 
   # join to channel
-  def on_join(m)
+  def on_join(m, names = [])
     channels = m.params.first.split(/,/)
     channels.each do |channel|
       @channels[channel] = { :topic => "" } unless @channels.key?(channel)
       post @prefix, JOIN, channel
       ## Join時にユーザ一覧を返す場合はここに追加する。
-      ## post nil, RPL_NAMREPLY,   @prefix.nick, "=", channel, "@#{@prefix.nick} @fuga @hoge"
-      post nil, RPL_NAMREPLY,   @prefix.nick, "=", channel, "@#{@prefix.nick}"
+      post nil, RPL_NAMREPLY,   @prefix.nick, "=", channel, "@#{@prefix.nick} #{names*' '}".strip
       post nil, RPL_ENDOFNAMES, @prefix.nick, channel, "End of NAMES list"
     end
   end
