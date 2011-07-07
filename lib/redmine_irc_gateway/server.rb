@@ -46,11 +46,13 @@ module RedmineIRCGateway
     def on_join(m, names = [])
       channels = m.params.first.split(/,/)
       channels.each do |channel|
-        @channels[channel] = { :topic => "" } unless @channels.key?(channel)
-        post @prefix, JOIN, channel
-        ## Join時にユーザ一覧を返す場合はここに追加する。
-        post nil, RPL_NAMREPLY,   @prefix.nick, "=", channel, "@#{@prefix.nick} #{names*' '}".strip
-        post nil, RPL_ENDOFNAMES, @prefix.nick, channel, "End of NAMES list"
+        if !@channels.key?(channel)
+          @channels[channel] = { :topic => "" }
+          post @prefix, JOIN, channel
+          ## Join時にユーザ一覧を返す場合はここに追加する。
+          post nil, RPL_NAMREPLY,   @prefix.nick, "=", channel, "@#{@prefix.nick} #{names*' '}".strip
+          post nil, RPL_ENDOFNAMES, @prefix.nick, channel, "End of NAMES list"
+        end
       end
     end
 
