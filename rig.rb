@@ -41,6 +41,10 @@ class RedmineIrcGateway < Net::IRC::Server::Session
     super
     @real, *@opts = @real.split(/\s+/)
     @opts ||= []
+
+		## Login Auto Join Channel
+		m.params[0] = "#RedmineIrcGateway"
+		on_join(m)
   end
 
   def on_join(m)
@@ -48,6 +52,8 @@ class RedmineIrcGateway < Net::IRC::Server::Session
     channels.each do |channel|
       @channels[channel] = { :topic => "" } unless @channels.key?(channel)
       post @prefix, JOIN, channel
+			## Join時にユーザ一覧を返す場合はここに追加する。
+      ## post nil, RPL_NAMREPLY,   @prefix.nick, "=", channel, "@#{@prefix.nick} @fuga @hoge"
       post nil, RPL_NAMREPLY,   @prefix.nick, "=", channel, "@#{@prefix.nick}"
       post nil, RPL_ENDOFNAMES, @prefix.nick, channel, "End of NAMES list"
     end
