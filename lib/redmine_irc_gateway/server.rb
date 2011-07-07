@@ -1,8 +1,10 @@
 module RedmineIrcGateway
   class Server < Net::IRC::Server::Session
+
     def server_name
-      self.class.to_s
+      Module.nesting.last.to_s
     end
+    alias :owner_user :server_name
 
     def server_version
       '0.0.0'
@@ -12,14 +14,9 @@ module RedmineIrcGateway
       "##{server_name}"
     end
 
-    def owner_user
-      server_name
-    end
-
     def initialize(*args)
       super
       @channels = {}
-      @config   = Pathname.new(ENV["HOME"]) + ".rig"
       @pit = Pit.get(server_name)
     end
 
@@ -58,12 +55,17 @@ module RedmineIrcGateway
     def on_privmsg(m)
       channel, message, = m.params
 
-      send_message = store_config(message)
-      if !send_message.nil?
-        m.modify!(owner_channel, send_message)
-        on_notice m
-      elsif @channels.key?(channel)
-        post @prefix.nick, PRIVMSG, channel, message
+      case channel
+      when owner_channel
+        send_message = store_config(message)
+        if !send_message.nil?
+          m.modify!(owner_channel, send_message)
+          on_notice m
+        end
+      else
+        if @channels.key?(channel)
+          post owner_user, PRIVMSG, channel, message
+        end
       end
     end
 
@@ -87,7 +89,7 @@ module RedmineIrcGateway
       m.params[0] = owner_channel
       users = ["@#{owner_user}"]
       on_join(m, users)
-    
+
       send_message = store_config
       if !send_message.nil?
         m.modify!(owner_channel, send_message)
@@ -97,16 +99,16 @@ module RedmineIrcGateway
 
     def store_config(message = nil)
       if @pit.empty? && message.nil?
-        "Please, input Redmine Url"
-      elsif @pit[:redmine_url].nil?
-        save_config(:redmine_url, message)
+        "Please, input Redmine URL"
+      elsif @pit[:url].nil?
+        save_config(:url, message)
         "Please, input Redmine User"
-      elsif @pit[:redmine_user].nil?
-        save_config(:redmine_user, message)
+      elsif @pit[:user].nil?
+        save_config(:user, message)
         "Please, input Redmine Password"
-      elsif @pit[:redmine_password].nil?
-        save_config(:redmine_password, message)
-        "Stored Config. Thanks."
+      elsif @pit[:password].nil?
+        save_config(:password, message)
+        "Stored Config. MAHALO."
       else
         nil
       end
