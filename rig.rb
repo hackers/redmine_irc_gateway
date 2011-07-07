@@ -15,7 +15,7 @@ require 'pit'
 
 class RedmineIrcGateway < Net::IRC::Server::Session
   def server_name
-    self.class
+    self.class.to_s
   end
 
   def server_version
