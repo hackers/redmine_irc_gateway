@@ -106,7 +106,7 @@ class RedmineIrcGateway < Net::IRC::Server::Session
     
     if @pit[:redmine_token].nil?
       m.params[0] = owner_channel
-      m.params[1] = "Redmine Token を入力してください。"
+      m.params[1] = "Please, input Redmine token."
       on_notice m
     end
   end
