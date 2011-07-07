@@ -1,9 +1,11 @@
 #!/usr/bin/env ruby
 # vim:encoding=UTF-8:
 
-$LOAD_PATH << (RUBY_VERSION > '1.9' ? './lib' : 'lib')
+require 'logger'
+require 'pathname'
+require 'yaml'
 
-$KCODE = 'u' unless defined? ::Encoding
+$LOAD_PATH << Pathname.new('./lib').realpath
 
 require 'redmine_irc_gateway'
 
@@ -75,6 +77,6 @@ separator ""
   end
 
   daemonize(opts[:debug] || opts[:foreground]) do
-    Net::IRC::Server.new(opts[:host], opts[:port], RedmineIrcGateway::Server, opts).start
+    Net::IRC::Server.new(opts[:host], opts[:port], RedmineIRCGateway::Server, opts).start
   end
 end
