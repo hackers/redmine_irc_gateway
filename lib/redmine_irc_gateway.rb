@@ -1,8 +1,14 @@
 #!/usr/bin/env ruby
 
-$LOAD_PATH << './redmine_irc_gateway'
+require 'logger'
+require 'pathname'
+require 'yaml'
 
-module RecmineIRCGateway
-  require 'redmine'
-  require 'server'
+require 'rubygems'
+require 'net/irc'
+require 'pit'
+
+module RedmineIRCGateway
+  #require 'redmine'
+  require './lib/redmine_irc_gateway/server'
 end
