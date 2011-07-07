@@ -34,7 +34,7 @@ class RedmineIrcGateway < Net::IRC::Server::Session
     super
     @channels = {}
     @config   = Pathname.new(ENV["HOME"]) + ".rig"
-	  @pit = Pit.get(server_name)
+    @pit = Pit.get(server_name)
   end
 
   # login to server
@@ -101,7 +101,7 @@ class RedmineIrcGateway < Net::IRC::Server::Session
   private
   def init_user(m)
     m.params[0] = owner_channel
-		users = ["@#{owner_user}"]
+    users = ["@#{owner_user}"]
     on_join(m, users)
     
     if @pit[:redmine_token].nil?
