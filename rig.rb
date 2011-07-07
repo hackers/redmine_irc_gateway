@@ -74,8 +74,9 @@ class RedmineIrcGateway < Net::IRC::Server::Session
     send_message = store_config(message)
 
     if !send_message.nil?
-      m.params[0] = owner_channel
-      m.params[1] = send_message
+      #m.params[0] = owner_channel
+      #m.params[1] = send_message
+      m.modify!(owner_channel, send_message)
       on_notice m
     elsif @channels.key?(channel)
       post @prefix.nick, PRIVMSG, channel, message
@@ -105,8 +106,9 @@ class RedmineIrcGateway < Net::IRC::Server::Session
     
     send_message = store_config
     if !send_message.nil?
-      m.params[0] = owner_channel
-      m.params[1] = send_message
+      #m.params[0] = owner_channel
+      #m.params[1] = send_message
+      m.modify!(owner_channel, send_message)
       on_notice m
     end
   end
@@ -137,6 +139,15 @@ class RedmineIrcGateway < Net::IRC::Server::Session
     Pit.set(server_name, :data => @pit)
   end
 
+end
+
+class Net::IRC::Message
+
+  def modify!(*args)
+    args.each_with_index { |n,i|
+      self.params[i] = n
+    }
+  end
 end
 
 if __FILE__ == $0
