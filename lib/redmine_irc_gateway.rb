@@ -9,7 +9,7 @@ require 'net/irc'
 require 'pit'
 
 module RedmineIRCGateway
-  #require 'redmine'
   require './lib/redmine_irc_gateway/message'
   require './lib/redmine_irc_gateway/server'
+  require './lib/redmine_irc_gateway/redmine'
 end
