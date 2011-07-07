@@ -1,2 +1,5 @@
 RedmineIRCGateway
 ================================================================================
+
+# AutoJoin Channel
+ - #RedmineIrcGateway
