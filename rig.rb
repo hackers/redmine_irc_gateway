@@ -114,7 +114,7 @@ class RedmineIrcGateway < Net::IRC::Server::Session
   private
   def store_config(message = nil)
 
-    if message.nil?
+    if @pit.empty?
       "Please, input Redmine Url"
     elsif @pit[:redmine_url].nil?
       save_config(:redmine_url, message)
