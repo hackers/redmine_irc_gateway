@@ -11,6 +11,7 @@ require 'net/irc'
 require 'logger'
 require 'pathname'
 require 'yaml'
+require 'pit'
 
 class RedmineIrcGateway < Net::IRC::Server::Session
   def server_name
@@ -21,10 +22,19 @@ class RedmineIrcGateway < Net::IRC::Server::Session
     '0.0.0'
   end
 
+  def owner_channel
+    "##{server_name}"
+  end
+
+  def owner_user
+    server_name
+  end
+
   def initialize(*args)
     super
     @channels = {}
     @config   = Pathname.new(ENV["HOME"]) + ".rig"
+	  @pit = Pit.get(server_name)
   end
 
   # login to server
@@ -33,9 +43,7 @@ class RedmineIrcGateway < Net::IRC::Server::Session
     @real, *@opts = @real.split(/\s+/)
     @opts ||= []
 
-    m.params[0] = "##{server_name}"
-		users = ["@#{server_name}"]
-    on_join(m, users)
+    init_user(m)
   end
 
   # logout from server
@@ -63,8 +71,22 @@ class RedmineIrcGateway < Net::IRC::Server::Session
 
   def on_privmsg(m)
     channel, message, = m.params
+
+    if @pit[:redmine_token].nil?
+      @pit[:redmine_token] = message
+      Pit.set(server_name, :data => @pit)
+      m.params[0] = owner_channel
+      m.params[1] = "Token Stored."
+      on_notice m
+    elsif @channels.key?(channel)
+      post @prefix.nick, PRIVMSG, channel, message
+    end
+  end
+
+  def on_notice(m)
+    channel, message, = m.params
     if @channels.key?(channel)
-      post server_name, NOTICE, channel, message
+      post @prefix.nick, NOTICE, channel, message
     end
   end
 
@@ -73,6 +95,19 @@ class RedmineIrcGateway < Net::IRC::Server::Session
     if @channels.key?(channel)
       post @prefix, TOPIC, channel, topic
       @channels[channel][:topic] = topic
+    end
+  end
+
+  private
+  def init_user(m)
+    m.params[0] = owner_channel
+		users = ["@#{owner_user}"]
+    on_join(m, users)
+    
+    if @pit[:redmine_token].nil?
+      m.params[0] = owner_channel
+      m.params[1] = "Redmine Token を入力してください。"
+      on_notice m
     end
   end
 end
