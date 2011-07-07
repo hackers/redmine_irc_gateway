@@ -5,9 +5,9 @@ require 'active_resource'
 
 
 class RestAPI < ActiveResource::Base
-  self.site = 'http://pj.es.occ.co.jp'
+  self.site = 'http://redmine.dev'
   self.user = 'admin'
-  self.password = 'project@1171'
+  self.password = ''
 end
 
 class Project < RestAPI; end
