@@ -1,26 +1,25 @@
 #!/usr/bin/env ruby
 # vim:encoding=UTF-8:
 
-$LOAD_PATH << "lib"
-$LOAD_PATH << "../lib"
+$LOAD_PATH << 'lib'
+$LOAD_PATH << '../lib'
 
-$KCODE = "u" unless defined? ::Encoding
+$KCODE = 'u' unless defined? ::Encoding
 
-require "rubygems"
-require "net/irc"
-require "logger"
-require "pathname"
-require "yaml"
+require 'rubygems'
+require 'net/irc'
+require 'logger'
+require 'pathname'
+require 'yaml'
 
 class RedmineIrcGateway < Net::IRC::Server::Session
   def server_name
-    "redmine"
+    self.class
   end
 
   def server_version
-    "0.0.0"
+    '0.0.0'
   end
-
 
   def initialize(*args)
     super
@@ -28,7 +27,19 @@ class RedmineIrcGateway < Net::IRC::Server::Session
     @config   = Pathname.new(ENV["HOME"]) + ".rig"
   end
 
+  # login to server
+  def on_user(m)
+    super
+    @real, *@opts = @real.split(/\s+/)
+    @opts ||= []
+
+    m.params[0] = "##{server_name}"
+    on_join(m)
+  end
+
+  # logout from server
   def on_disconnected
+    p @channels
     @channels.each do |chan, info|
       begin
         info[:observer].kill if info[:observer]
@@ -37,22 +48,13 @@ class RedmineIrcGateway < Net::IRC::Server::Session
     end
   end
 
-  def on_user(m)
-    super
-    @real, *@opts = @real.split(/\s+/)
-    @opts ||= []
-
-		## Login Auto Join Channel
-		m.params[0] = "#RedmineIrcGateway"
-		on_join(m)
-  end
-
+  # join to channel
   def on_join(m)
     channels = m.params.first.split(/,/)
     channels.each do |channel|
       @channels[channel] = { :topic => "" } unless @channels.key?(channel)
       post @prefix, JOIN, channel
-			## Join時にユーザ一覧を返す場合はここに追加する。
+      ## Join時にユーザ一覧を返す場合はここに追加する。
       ## post nil, RPL_NAMREPLY,   @prefix.nick, "=", channel, "@#{@prefix.nick} @fuga @hoge"
       post nil, RPL_NAMREPLY,   @prefix.nick, "=", channel, "@#{@prefix.nick}"
       post nil, RPL_ENDOFNAMES, @prefix.nick, channel, "End of NAMES list"
@@ -68,7 +70,6 @@ class RedmineIrcGateway < Net::IRC::Server::Session
 
   def on_topic(m)
     channel, topic, = m.params
-    p m.params
     if @channels.key?(channel)
       post @prefix, TOPIC, channel, topic
       @channels[channel][:topic] = topic
