@@ -7,3 +7,4 @@ i18n -v0.5.0
 net-http-digest_auth -v1.1.1
 net-http-persistent -v1.8
 net-irc -v0.0.9
+pit -v0.0.6
