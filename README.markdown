@@ -10,7 +10,7 @@ Create development environment
     $ cd redmine_irc_gateway
     $ rvm gemset craete rig
     $ rvm gemset use rig
-    $ rvm gemset improt rig.gems
+    $ rvm gemset import rig.gems
 
 
 First
