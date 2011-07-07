@@ -86,16 +86,26 @@ module RedmineIrcGateway
 
     private
 
-    def init_user(m)
-      m.params[0] = owner_channel
-      users = ["@#{owner_user}"]
-      on_join(m, users)
-
-      if @pit[:redmine_token].nil?
-        m.params[0] = owner_channel
-        m.params[1] = 'Please, Input Redmine Token'
-        on_notice m
+    def store_config(message = nil)
+      if @pit.empty?
+        "Please, input Redmine Url"
+      elsif @pit[:redmine_url].nil?
+        save_config(:redmine_url, message)
+        "Please, input Redmine User"
+      elsif @pit[:redmine_user].nil?
+        save_config(:redmine_user, message)
+        "Please, input Redmine Password"
+      elsif @pit[:redmine_password].nil?
+        save_config(:redmine_password, message)
+        "Stored Config. Thanks."
+      else
+        nil
       end
+    end
+
+    def save_config(key, value)
+      @pit[key] = value
+      Pit.set(server_name, :data => @pit)
     end
   end
 end
