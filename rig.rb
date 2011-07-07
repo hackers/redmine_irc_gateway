@@ -71,12 +71,11 @@ class RedmineIrcGateway < Net::IRC::Server::Session
 
   def on_privmsg(m)
     channel, message, = m.params
+    send_message = store_config(message)
 
-    if @pit[:redmine_token].nil?
-      @pit[:redmine_token] = message
-      Pit.set(server_name, :data => @pit)
+    if !send_message.nil?
       m.params[0] = owner_channel
-      m.params[1] = "Token Stored."
+      m.params[1] = send_message
       on_notice m
     elsif @channels.key?(channel)
       post @prefix.nick, PRIVMSG, channel, message
@@ -104,12 +103,40 @@ class RedmineIrcGateway < Net::IRC::Server::Session
     users = ["@#{owner_user}"]
     on_join(m, users)
     
-    if @pit[:redmine_token].nil?
+    send_message = store_config
+    if !send_message.nil?
       m.params[0] = owner_channel
-      m.params[1] = "Please, input Redmine token."
+      m.params[1] = send_message
       on_notice m
     end
   end
+
+  private
+  def store_config(message = nil)
+
+    if message.nil?
+      "Please, input Redmine Url"
+    elsif @pit[:redmine_url].nil?
+      save_config(:redmine_url, message)
+      "Please, input Redmine User"
+    elsif @pit[:redmine_user].nil?
+      save_config(:redmine_user, message)
+      "Please, input Redmine Password"
+    elsif @pit[:redmine_password].nil?
+      save_config(:redmine_password, message)
+      "Stored Config. Thanks."
+    else
+      nil
+    end
+
+  end
+
+  private
+  def save_config(key, value)
+    @pit[key] = value
+    Pit.set(server_name, :data => @pit)
+  end
+
 end
 
 if __FILE__ == $0
