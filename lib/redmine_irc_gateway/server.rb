@@ -6,7 +6,10 @@ module RedmineIRCGateway
     def server_name
       Module.nesting.last.to_s
     end
-    alias :owner_user :server_name
+
+    def owner_user
+      :Redmine
+    end
 
     def server_version
       '0.0.0'
@@ -33,7 +36,6 @@ module RedmineIRCGateway
 
     # logout from server
     def on_disconnected
-      p @channels
       @channels.each do |chan, info|
         begin
           info[:observer].kill if info[:observer]
@@ -68,7 +70,16 @@ module RedmineIRCGateway
         end
       else
         if @channels.key?(channel)
-          post owner_user, PRIVMSG, channel, message
+          if message == 'list'
+            Issue.find(:all).each { |i| post owner_user, PRIVMSG, channel, "4[ #{i.id} ] #{i.subject} by 3#{i.author.name}" }
+          else
+            begin
+              issue_subject = Issue.find(message).subject
+            rescue
+              issue_subject = 'Not found'
+            end
+            post owner_user, PRIVMSG, channel, issue_subject
+          end
         end
       end
     end

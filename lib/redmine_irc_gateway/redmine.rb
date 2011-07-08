@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 
+require 'ostruct'
 require 'active_resource'
 
 module RedmineIRCGateway
@@ -13,5 +14,3 @@ module RedmineIRCGateway
   class Project < RestAPI; end
   class Issue   < RestAPI; end
 end
-
-#puts Issue.find(:all)
