@@ -17,7 +17,7 @@ if __FILE__ == $0
     :host  => "localhost",
     :log   => nil,
     :debug => false,
-    :foreground => false,
+    :foreground => true,
   }
 
   OptionParser.new do |parser|
