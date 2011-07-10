@@ -12,7 +12,7 @@ module RedmineIRCGateway
     end
 
     def server_version
-      '0.0.0'
+      RedmineIRCGateway::VERSION
     end
 
     def owner_channel
