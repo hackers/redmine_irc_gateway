@@ -4,7 +4,7 @@
 require 'logger'
 require 'yaml'
 
-$:.push File.expand_path('../lib', __FILE__)
+$:.push File.expand_path('../../lib', __FILE__)
 
 require 'redmine_irc_gateway'
 
