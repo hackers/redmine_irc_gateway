@@ -5,7 +5,7 @@ Redmine IRC Gateway
 Overview
 -------------------------------------------------------------------------------
 
-### What's this ?
+### What's this?
 
 This project privides an access to Redmine API via IRC Gateway.
 But, yet not working ;-p
@@ -35,7 +35,7 @@ Installation
         $ rvm gemset craete rig
         $ rvm gemset use rig
         $ gem install rake bundler
-        $ bundler install
+        $ bundle
 
 
 LICENSE
