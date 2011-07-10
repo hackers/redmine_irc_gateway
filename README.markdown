@@ -2,10 +2,29 @@ Redmine IRC Gateway
 ================================================================================
 
 
-Create development environment
+Overview
 -------------------------------------------------------------------------------
 
-    $ rvm install 1.9.2-head
+### What's this ?
+
+This project privides an access to Redmine API via IRC Gateway.
+But, yet not working ;-p
+
+
+Installation
+-------------------------------------------------------------------------------
+
+### Requirements
+
+- Ruby 1.8.7
+- RubyGems
+    - net-irc
+    - activeresource
+    - pit
+
+### Create development environment
+
+    $ rvm install 1.8.7
     $ git clone git@github.com:hackers/redmine_irc_gateway.git
     $ cd redmine_irc_gateway
     $ rvm gemset craete rig
@@ -13,9 +32,7 @@ Create development environment
     $ rvm gemset import rig.gems
 
 
-First
+LICENSE
 -------------------------------------------------------------------------------
 
-### AutoJoin Channel
-
- - #RedmineIrcGateway
+this plugin is licensed under the MAHALO License.  See LICENSE for details.
