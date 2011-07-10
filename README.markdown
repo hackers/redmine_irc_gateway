@@ -18,21 +18,27 @@ Installation
 
 - Ruby 1.8.7
 - RubyGems
-    - net-irc
-    - activeresource
-    - pit
+    - Rake
+    - Bundler
+
 
 ### Create development environment
 
-    $ rvm install 1.8.7
-    $ git clone git@github.com:hackers/redmine_irc_gateway.git
-    $ cd redmine_irc_gateway
-    $ rvm gemset craete rig
-    $ rvm gemset use rig
-    $ rvm gemset import rig.gems
+1. Clone git repo
+
+        $ git clone git@github.com:hackers/redmine_irc_gateway.git
+        $ cd redmine_irc_gateway
+
+2. Install Ruby and RubyGems
+
+        $ rvm install 1.8.7
+        $ rvm gemset craete rig
+        $ rvm gemset use rig
+        $ gem install rake bundler
+        $ bundler install
 
 
 LICENSE
 -------------------------------------------------------------------------------
 
-this plugin is licensed under the MAHALO License.  See LICENSE for details.
+This project is licensed under the MAHALO License.  See LICENSE for details.
