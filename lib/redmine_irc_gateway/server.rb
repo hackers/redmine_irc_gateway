@@ -1,5 +1,3 @@
-#!/usr/bin/env ruby
-
 module RedmineIRCGateway
   class Server < Net::IRC::Server::Session
 
