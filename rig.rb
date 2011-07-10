@@ -1,11 +1,10 @@
 #!/usr/bin/env ruby
-# vim:encoding=UTF-8:
+# -*- encoding: utf-8 -*-
 
 require 'logger'
-require 'pathname'
 require 'yaml'
 
-$LOAD_PATH << Pathname.new('./lib').realpath
+$:.push File.expand_path('../lib', __FILE__)
 
 require 'redmine_irc_gateway'
 
