@@ -16,6 +16,7 @@ Installation
 
 ### Requirements
 
+- RVM
 - Ruby 1.8.7
 - RubyGems
     - Rake
@@ -29,16 +30,13 @@ Installation
         $ git clone git@github.com:hackers/redmine_irc_gateway.git
         $ cd redmine_irc_gateway
 
-2. Install Ruby and RubyGems
+2. Installing Ruby and libraries
 
         $ rvm install 1.8.7
-        $ rvm gemset craete rig
-        $ rvm gemset use rig
-        $ gem install rake bundler
-        $ bundle
+        $ rake rig:development:setup
 
 
 LICENSE
 -------------------------------------------------------------------------------
 
-This project is licensed under the MAHALO License.  See LICENSE for details.
+This project is licensed under the MAHALO license. See LICENSE for details.
