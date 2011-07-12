@@ -17,6 +17,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'net-irc'
   s.add_dependency 'activeresource'
   s.add_dependency 'pit'
+  s.add_dependency 'foreverb'
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
