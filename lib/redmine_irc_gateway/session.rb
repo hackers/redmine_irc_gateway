@@ -1,5 +1,5 @@
 module RedmineIRCGateway
-  class Server < Net::IRC::Server::Session
+  class Session < Net::IRC::Server::Session
 
     def server_name
       Module.nesting.last.to_s
@@ -69,7 +69,7 @@ module RedmineIRCGateway
       else
         if @channels.key?(channel)
           if message == 'list'
-            Issue.find(:all).each { |i| post owner_user, PRIVMSG, channel, "4[ #{i.id} ] #{i.subject} by 3#{i.author.name}" }
+            Issue.find(:all).each { |i| post owner_user, PRIVMSG, channel, "4[ #{i.id} ] #{i.subject}" }
           else
             begin
               issue_subject = Issue.find(message).subject
