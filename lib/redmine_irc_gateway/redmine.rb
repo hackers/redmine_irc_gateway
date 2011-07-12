@@ -1,4 +1,3 @@
-require 'ostruct'
 require 'active_resource'
 
 module RedmineIRCGateway
