@@ -7,5 +7,5 @@ module RedmineIRCGateway
   require 'redmine_irc_gateway/message'
   require 'redmine_irc_gateway/redmine'
 
-  autoload :Server, 'redmine_irc_gateway/server'
+  autoload :Session, 'redmine_irc_gateway/session'
 end
