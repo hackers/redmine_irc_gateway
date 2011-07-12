@@ -3,57 +3,35 @@
 
 $:.push File.expand_path('../../lib', __FILE__)
 
+require 'logger'
+
+require 'rubygems'
+require 'slop'
+
+require 'redmine_irc_gateway'
+
 if __FILE__ == $0
-  require "optparse"
 
-  opts = {
-    :port  => 16700,
-    :host  => "localhost",
-    :log   => nil,
-    :debug => false,
-    :foreground => true,
-  }
-
-  OptionParser.new do |parser|
-    parser.instance_eval do
-      self.banner  = <<-EOB.gsub(/^\t+/, "")
-        Usage: #{$0} [opts]
-
-      EOB
-separator ""
-
-      separator "Options:"
-      on("-p", "--port [PORT=#{opts[:port]}]", "port number to listen") do |port|
-        opts[:port] = port
-      end
-
-      on("-h", "--host [HOST=#{opts[:host]}]", "host name or IP address to listen") do |host|
-        opts[:host] = host
-      end
-
-      on("-l", "--log LOG", "log file") do |log|
-        opts[:log] = log
-      end
-
-      on("--debug", "Enable debug mode") do |debug|
-        opts[:debug] = true
-      end
-
-      parse!(ARGV)
+  opts = Slop.parse :help => true do
+    banner "Usage: #{$0} [options]"
+    on :p, :port,    'Port number to listen',             true,  :as => :integer, :default => 16700
+    on :h, :host,    'Host name or IP address to listen', true,  :as => :string,  :default => :localhost
+    on :l, :log,     'log file',                          true,  :as => :string,  :default => nil
+    on :d, :debug,   'Enable debug mode',                 false, :as => :boolean, :default => false
+    on :v, :version, 'Print the version' do
+      puts RedmineIRCGateway::VERSION
+      exit
     end
-  end
+  end.to_hash
 
-  require 'logger'
-  opts[:logger] = Logger.new(STDOUT)
+  opts[:logger] = Logger.new STDOUT
   opts[:logger].level = opts[:debug] ? Logger::DEBUG : Logger::INFO
 
-  require 'rubygems'
   require 'forever'
   Forever.run do
     log opts[:log] unless opts[:log]
 
     on_ready do
-      require 'redmine_irc_gateway'
       Net::IRC::Server.new(opts[:host], opts[:port], RedmineIRCGateway::Session, opts).start
     end
   end
