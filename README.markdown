@@ -1,4 +1,4 @@
-Redmine IRC Gateway
+RedmineIRCGateway [![Build Status](http://travis-ci.org/hackers/redmine_irc_gateway.png)](http://travis-ci.org/hackers/redmine_irc_gateway)
 ================================================================================
 
 
