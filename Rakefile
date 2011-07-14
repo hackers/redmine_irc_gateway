@@ -14,6 +14,8 @@ namespace :rig do
   end
 
   namespace :test do
+    $: << File.expand_path('../lib', __FILE__)
+    $: << File.expand_path('../test', __FILE__)
     require 'rake/testtask'
     Rake::TestTask.new 'all'
   end
