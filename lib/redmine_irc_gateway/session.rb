@@ -14,13 +14,14 @@ module RedmineIRCGateway
     end
 
     def owner_channel
-      "##{server_name}"
+      @pit[:owner_channel] ||= "##{server_name}"
     end
 
     def initialize(*args)
       super
       @channels = {}
       @pit = Pit.get(server_name)
+      @pit[:server_name] ||= server_name
     end
 
     # login to server
@@ -29,7 +30,7 @@ module RedmineIRCGateway
       @real, *@opts = @real.split(/\s+/)
       @opts ||= []
 
-      init_user(m)
+      start_observer m
     end
 
     # logout from server
@@ -61,7 +62,7 @@ module RedmineIRCGateway
 
       case channel
       when owner_channel
-        send_message = store_config(message)
+        send_message = @authority.prive channel, message
         if !send_message.nil?
           m.modify!(owner_channel, send_message)
           on_notice m
@@ -98,38 +99,19 @@ module RedmineIRCGateway
     end
 
     private
-    def init_user(m)
+    def start_observer(m)
       m.params[0] = owner_channel
       users = ["@#{owner_user}"]
       on_join(m, users)
 
-      send_message = store_config
+      @authority = Authority.new(@pit)
+      send_message = @authority.prive owner_channel
+
       if !send_message.nil?
         m.modify!(owner_channel, send_message)
         on_notice m
       end
     end
 
-    def store_config(message = nil)
-      if @pit.empty? && message.nil?
-        "Please, input Redmine URL"
-      elsif @pit[:url].nil?
-        save_config(:url, message)
-        "Please, input Redmine User"
-      elsif @pit[:user].nil?
-        save_config(:user, message)
-        "Please, input Redmine Password"
-      elsif @pit[:password].nil?
-        save_config(:password, message)
-        "Stored Config. MAHALO."
-      else
-        nil
-      end
-    end
-
-    def save_config(key, value)
-      @pit[key] = value
-      Pit.set(server_name, :data => @pit)
-    end
   end
 end
