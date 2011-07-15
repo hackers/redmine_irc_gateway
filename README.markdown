@@ -36,7 +36,42 @@ Installation
         $ rake rig:development:setup
 
 
+How to use
+-------------------------------------------------------------------------------
+
+### Run, and stay on top
+
+    $ lib/redmine_irc_gateway.rb
+
+    If you want to use debug mode, add the `--debug` option. like this.
+
+    $ lib/redmine_irc_gateway.rb --debug
+
+
+### Process daemonize
+
+#### Start
+
+    $ bin/rig start
+
+#### Stop
+
+    $ bin/rig stop
+
+#### Restart
+
+    $ bin/rig restart
+
+
+Authors
+-------------------------------------------------------------------------------
+
+Tomohiro, TAIRA a.k.a [@Tomohiro](http://twitter.com/Tomohiro) (tomohiro.t@gmail.com)
+Naoto, Shingaki a.k.a [@naotos](http://twitter.com/naotos)
+
+
 LICENSE
 -------------------------------------------------------------------------------
 
-This project is licensed under the MAHALO license. See LICENSE for details.
+This project is dual licensed under the MAHALO license or GPL Version 2 licenses.
+See LICENSE for details.
