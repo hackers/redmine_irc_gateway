@@ -43,7 +43,7 @@ How to use
 
     $ lib/redmine_irc_gateway.rb
 
-    If you want to use debug mode, add the `--debug` option. like this.
+If you want to use debug mode, add the `--debug` option. like this.
 
     $ lib/redmine_irc_gateway.rb --debug
 
