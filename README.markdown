@@ -68,7 +68,7 @@ Authors
 
 Tomohiro, TAIRA a.k.a [@Tomohiro](http://twitter.com/Tomohiro) (tomohiro.t@gmail.com)
 
-Naoto, Shingaki a.k.a [@naotos](http://twitter.com/naotos)
+Naoto, Shingaki a.k.a [@naotos](http://twitter.com/naotos) (n.shingaki@gmail.com)
 
 
 LICENSE
