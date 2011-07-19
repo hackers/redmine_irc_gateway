@@ -11,6 +11,6 @@ Forever.run do
   log server.opts[:log] unless server.opts[:log]
 
   on_ready do
-    server.run!
+    server.start
   end
 end
