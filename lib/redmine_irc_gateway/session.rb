@@ -70,10 +70,10 @@ module RedmineIRCGateway
       else
         if @channels.key?(channel)
           if message == 'list'
-            Issue.find(:all).each { |i| post owner_user, PRIVMSG, channel, "4[ #{i.id} ] #{i.subject}" }
+            Redmine::Issue.find(:all).each { |i| post owner_user, PRIVMSG, channel, "4[ #{i.id} ] #{i.subject}" }
           else
             begin
-              issue_subject = Issue.find(message).subject
+              issue_subject = Redmine::Issue.find(message).subject
             rescue
               issue_subject = 'Not found'
             end

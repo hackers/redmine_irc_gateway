@@ -8,7 +8,13 @@ require 'pit'
 
 module RedmineIRCGateway
   require 'redmine_irc_gateway/version'
-  require 'redmine_irc_gateway/redmine'
+
+  require 'redmine_irc_gateway/redmine/api'
+  require 'redmine_irc_gateway/redmine/project'
+  require 'redmine_irc_gateway/redmine/issue'
+  require 'redmine_irc_gateway/redmine/user'
+  require 'redmine_irc_gateway/redmine/time_entry'
+  require 'redmine_irc_gateway/redmine/version'
 
   require 'redmine_irc_gateway/message'
   require 'redmine_irc_gateway/authority'
