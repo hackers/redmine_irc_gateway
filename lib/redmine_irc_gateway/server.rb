@@ -18,6 +18,10 @@ module RedmineIRCGateway
         end
       end.to_hash
 
+      @opts.each { |key, val|
+        puts "#{key}: #{val}" if !val.nil?
+      }
+
       @opts[:logger] = Logger.new STDOUT
       @opts[:logger].level = @opts[:debug] ? Logger::DEBUG : Logger::INFO
     end
