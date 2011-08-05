@@ -17,6 +17,10 @@ module RedmineIRCGateway
       @pit[:owner_channel] ||= "##{server_name}"
     end
 
+    def config_channel
+      "#Console"
+    end
+
     def initialize(*args)
       super
       @channels = {}
@@ -35,23 +39,23 @@ module RedmineIRCGateway
 
     # logout from server
     def on_disconnected
-      @channels.each do |chan, info|
+      @channels.each do |chan, _ins|
         begin
-          info[:observer].kill if info[:observer]
+          _ins.observer.kill if _ins.observer
         rescue
         end
       end
     end
 
     # join to channel
-    def on_join(m, names = [])
+    def on_join(m)
       channels = m.params.first.split(/,/)
       channels.each do |channel|
         if !@channels.key?(channel)
-          @channels[channel] = { :topic => "" }
+          @channels[channel] = Channel.new(channel)
           post @prefix, JOIN, channel
           ## Join時にユーザ一覧を返す場合はここに追加する。
-          post nil, RPL_NAMREPLY,   @prefix.nick, "=", channel, "@#{@prefix.nick} #{names*' '}".strip
+          post nil, RPL_NAMREPLY,   @prefix.nick, "=", channel, @channels[channel].users.keys.join(" ")
           post nil, RPL_ENDOFNAMES, @prefix.nick, channel, "End of NAMES list"
         end
       end
@@ -61,10 +65,10 @@ module RedmineIRCGateway
       channel, message, = m.params
 
       case channel
-      when owner_channel
+      when config_channel
         send_message = @authority.prive channel, message
         if !send_message.nil?
-          m.modify!(owner_channel, send_message)
+          m.modify!(config_channel, send_message)
           on_notice m
         end
       else
@@ -94,23 +98,14 @@ module RedmineIRCGateway
       channel, topic, = m.params
       if @channels.key?(channel)
         post @prefix, TOPIC, channel, topic
-        @channels[channel][:topic] = topic
+        @channels[channel].topic = topic
       end
     end
 
     private
     def start_observer(m)
-      m.params[0] = owner_channel
-      users = ["@#{owner_user}"]
-      on_join(m, users)
-
-      @authority = Authority.new(@pit)
-      send_message = @authority.prive owner_channel
-
-      if !send_message.nil?
-        m.modify!(owner_channel, send_message)
-        on_notice m
-      end
+      m.params[0] = config_channel
+      on_join(m)
     end
 
   end

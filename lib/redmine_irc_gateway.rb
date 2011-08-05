@@ -20,6 +20,7 @@ module RedmineIRCGateway
   require 'redmine_irc_gateway/authority'
   require 'redmine_irc_gateway/session'
   require 'redmine_irc_gateway/server'
+  require 'redmine_irc_gateway/channel'
 end
 
 if __FILE__ == $0
