@@ -7,6 +7,10 @@ module RedmineIRCGateway
       self.site = config.url
       self.user = config.user
       self.password = config.password
+
+      def self.find(*args)
+        super rescue []
+      end
     end
   end
 end

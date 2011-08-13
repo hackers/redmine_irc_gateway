@@ -11,6 +11,17 @@ module RedmineIRCGateway
       assert_equal 'RedmineIRCGateway::Redmine::Issue', RedmineIRCGateway::Redmine::Issue.to_s
     end
 
+    def test_issue_assigned_me
+      RedmineIRCGateway::Redmine::Issue.assigned_me.each do |i|
+        puts i.assigned_to.name
+      end
+    end
+
+    def test_issue_watched
+      #RedmineIRCGateway::Redmine::Issue.watched.each { |i| puts i.inspect }
+      #RedmineIRCGateway::Redmine::Issue.watched.each { |i| puts i }
+    end
+
     def test_user_class
       assert_equal 'RedmineIRCGateway::Redmine::User', RedmineIRCGateway::Redmine::User.to_s
     end
