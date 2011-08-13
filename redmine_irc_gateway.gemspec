@@ -1,11 +1,10 @@
-# -*- encoding: utf-8 -*-
 $:.push File.expand_path('../lib', __FILE__)
 require 'redmine_irc_gateway/version'
 
 Gem::Specification.new do |s|
   s.name        = 'redmine_irc_gateway'
   s.version     = RedmineIRCGateway::VERSION
-  s.authors     = ['Tomohiro, TAIRA', 'Shingaki, Naoto']
+  s.authors     = ['Tomohiro, TAIRA', 'Naoto, SHINGAKI']
   s.email       = ['tomohiro.t@gmail.com', 'n.shingaki@gmail.com']
   s.homepage    = 'http://github.com/hackers/redmine_irc_gateway'
   s.summary     = %q{Redmine IRC Gateway}
@@ -19,6 +18,8 @@ Gem::Specification.new do |s|
   s.add_dependency 'pit'
   s.add_dependency 'foreverb'
   s.add_dependency 'slop'
+
+  s.add_development_dependency 'watchr'
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
