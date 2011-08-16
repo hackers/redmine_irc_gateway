@@ -4,9 +4,8 @@ require 'redmine_irc_gateway'
 module RedmineIRCGateway
   module Redmine
     class API < ActiveResource::Base
-      self.site = 'http://sandbox-98oi18xm.fluxflex.com'
-      self.user = 'test'
-      self.password = 'test'
+      self.site = 'http://rig-dev.fluxflex.com'
+      self.key  = 'ec8d7c27ca5f9266a434bd2f053f98fd5db58c28'
     end
   end
 end
