@@ -64,26 +64,8 @@ module RedmineIRCGateway
     def on_privmsg(m)
       channel, message, = m.params
 
-      case channel
-      when config_channel
-        send_message = @authority.prive channel, message
-        if !send_message.nil?
-          m.modify!(config_channel, send_message)
-          on_notice m
-        end
-      else
-        if @channels.key?(channel)
-          if message == 'list'
-            Redmine::Issue.find(:all).each { |i| post owner_user, PRIVMSG, channel, "4[ #{i.id} ] #{i.subject}" }
-          else
-            begin
-              issue_subject = Redmine::Issue.find(message).subject
-            rescue
-              issue_subject = 'Not found'
-            end
-            post owner_user, PRIVMSG, channel, issue_subject
-          end
-        end
+      if @channels.key?(channel)
+        @channels.talk message
       end
     end
 

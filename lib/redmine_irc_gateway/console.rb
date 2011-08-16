@@ -5,5 +5,8 @@ module RedmineIRCGateway
       super
     end
 
+    def message
+    end
+
   end
 end
