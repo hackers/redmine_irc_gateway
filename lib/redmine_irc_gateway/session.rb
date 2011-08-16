@@ -1,12 +1,14 @@
 module RedmineIRCGateway
   class Session < Net::IRC::Server::Session
 
+    attr_accessor :config
+
     def server_name
       Module.nesting.last.to_s
     end
 
     def owner_user
-      :Redmine
+      "@Redmine"
     end
 
     def server_version
@@ -14,7 +16,7 @@ module RedmineIRCGateway
     end
 
     def owner_channel
-      @pit[:owner_channel] ||= "##{server_name}"
+      "##{server_name}"
     end
 
     def config_channel
@@ -24,8 +26,7 @@ module RedmineIRCGateway
     def initialize(*args)
       super
       @channels = {}
-      @pit = Pit.get(server_name)
-      @pit[:server_name] ||= server_name
+      @config = Pit.get(server_name)
     end
 
     def post(*param)
@@ -56,7 +57,7 @@ module RedmineIRCGateway
       channels = m.params.first.split(/,/)
       channels.each do |channel|
         if !@channels.key?(channel)
-          @channels[channel] = Channel.new(channel, self, @prefix, ["@#{owner_user}"])
+          @channels[channel] = Channel.new(channel, self, @prefix, [owner_user])
         end
       end
     end
@@ -65,7 +66,7 @@ module RedmineIRCGateway
       channel, message, = m.params
 
       if @channels.key?(channel)
-        @channels.talk message
+        @channels[channel].talk message
       end
     end
 
@@ -85,7 +86,7 @@ module RedmineIRCGateway
 
     private
     def start_observer()
-      @channels[config_channel] = Console.new(config_channel, self, @prefix, ["@#{owner_user}"])
+      @channels[config_channel] = Console.new(config_channel, self, @prefix, [owner_user])
     end
 
   end
