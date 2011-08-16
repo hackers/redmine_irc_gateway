@@ -56,7 +56,7 @@ module RedmineIRCGateway
       channels = m.params.first.split(/,/)
       channels.each do |channel|
         if !@channels.key?(channel)
-          @channels[channel] = Channel.new(channel, self, @prefix)
+          @channels[channel] = Channel.new(channel, self, @prefix, ["@#{owner_user}"])
         end
       end
     end
