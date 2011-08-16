@@ -7,6 +7,7 @@ module RedmineIRCGateway
       self.site = config.url
       self.user = config.user
       self.password = config.password
+      self.proxy = ENV['http_proxy'] if ENV['http_proxy']
 
       def self.find(*args)
         super rescue []
