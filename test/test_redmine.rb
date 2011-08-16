@@ -1,37 +1,53 @@
-require 'test/unit'
-require 'redmine_irc_gateway'
+require 'test/test_helper'
 
 module RedmineIRCGateway
-  class RedmineTest < Test::Unit::TestCase
-    def test_project_class
-      assert_equal 'RedmineIRCGateway::Redmine::Project', RedmineIRCGateway::Redmine::Project.to_s
-    end
-
-    def test_issue_class
-      assert_equal 'RedmineIRCGateway::Redmine::Issue', RedmineIRCGateway::Redmine::Issue.to_s
-    end
-
-    def test_issue_assigned_me
-      RedmineIRCGateway::Redmine::Issue.assigned_me.each do |i|
-        puts i.assigned_to.name
+  module Redmine
+    class RedmineTest < Test::Unit::TestCase
+      def test_project_class
+        assert_equal 'RedmineIRCGateway::Redmine::Project', Project.to_s
       end
-    end
 
-    def test_issue_watched
-      #RedmineIRCGateway::Redmine::Issue.watched.each { |i| puts i.inspect }
-      #RedmineIRCGateway::Redmine::Issue.watched.each { |i| puts i }
-    end
+      def test_project_issues
+        my_project = User.current.projects.first
+        my_project.issues.each do |i|
+          assert_equal Issue.to_s, i.class.to_s
+        end
+      end
 
-    def test_user_class
-      assert_equal 'RedmineIRCGateway::Redmine::User', RedmineIRCGateway::Redmine::User.to_s
-    end
+      def test_issue_class
+        assert_equal 'RedmineIRCGateway::Redmine::Issue', Issue.to_s
+      end
 
-    def test_time_entry_class
-      assert_equal 'RedmineIRCGateway::Redmine::TimeEntry', RedmineIRCGateway::Redmine::TimeEntry.to_s
-    end
+      def test_issue_assigned_me
+        my_name = User.current.name
+        Issue.assigned_me.each do |i|
+          assert_equal my_name, i.assigned_to.name
+        end
+      end
 
-    def test_version_class
-      assert_equal 'RedmineIRCGateway::Redmine::Version', RedmineIRCGateway::Redmine::Version.to_s
+      def test_issue_watched
+        Issue.watched.each do |i|
+          assert_equal Issue.to_s, i.class.to_s
+        end
+      end
+
+      def test_user_class
+        assert_equal 'RedmineIRCGateway::Redmine::User', User.to_s
+      end
+
+      def test_user_my_projects
+        User.current.projects.each do |p|
+          assert_equal Project.to_s, p.class.to_s
+        end
+      end
+
+      def test_time_entry_class
+        assert_equal 'RedmineIRCGateway::Redmine::TimeEntry', TimeEntry.to_s
+      end
+
+      def test_version_class
+        assert_equal 'RedmineIRCGateway::Redmine::Version', Version.to_s
+      end
     end
   end
 end

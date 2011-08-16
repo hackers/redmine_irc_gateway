@@ -11,6 +11,10 @@ module RedmineIRCGateway
       def self.find(*args)
         super rescue []
       end
+
+      def self.all(params = nil)
+        super({ :params => params })
+      end
     end
   end
 end
