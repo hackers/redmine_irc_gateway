@@ -1,8 +1,10 @@
 module RedmineIRCGateway
   module Redmine
     class User < API
-      def self.current
-        find(:current)
+      class << self
+        def current
+          find(:current)
+        end
       end
 
       def name

@@ -9,12 +9,14 @@ module RedmineIRCGateway
       self.password = config.password
       self.proxy = ENV['http_proxy'] if ENV['http_proxy']
 
-      def self.find(*args)
-        super rescue []
-      end
+      class << self
+        def find(*args)
+          super rescue []
+        end
 
-      def self.all(params = nil)
-        super({ :params => params })
+        def all(params = nil)
+          super({ :params => params })
+        end
       end
     end
   end
