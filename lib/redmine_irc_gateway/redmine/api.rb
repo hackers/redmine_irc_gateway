@@ -7,9 +7,20 @@ module RedmineIRCGateway
       self.site = config.url
       self.user = config.user
       self.password = config.password
+      self.proxy = ENV['http_proxy'] if ENV['http_proxy']
+      self.logger = Logger.new STDOUT
 
-      def self.find(*args)
-        super rescue []
+      class << self
+        def find(*args)
+          super
+        rescue => e
+          self.logger.error e.to_s
+          nil
+        end
+
+        def all(params = nil)
+          super({ :params => params })
+        end
       end
     end
   end
