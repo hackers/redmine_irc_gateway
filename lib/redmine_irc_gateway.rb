@@ -21,6 +21,7 @@ module RedmineIRCGateway
   require 'redmine_irc_gateway/session'
   require 'redmine_irc_gateway/server'
   require 'redmine_irc_gateway/channel'
+  require 'redmine_irc_gateway/console'
 end
 
 if __FILE__ == $0

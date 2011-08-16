@@ -28,13 +28,17 @@ module RedmineIRCGateway
       @pit[:server_name] ||= server_name
     end
 
+    def post(*param)
+      super
+    end
+
     # login to server
     def on_user(m)
       super
       @real, *@opts = @real.split(/\s+/)
       @opts ||= []
 
-      start_observer m
+      start_observer
     end
 
     # logout from server
@@ -52,11 +56,7 @@ module RedmineIRCGateway
       channels = m.params.first.split(/,/)
       channels.each do |channel|
         if !@channels.key?(channel)
-          @channels[channel] = Channel.new(channel)
-          post @prefix, JOIN, channel
-          ## Join時にユーザ一覧を返す場合はここに追加する。
-          post nil, RPL_NAMREPLY,   @prefix.nick, "=", channel, @channels[channel].users.keys.join(" ")
-          post nil, RPL_ENDOFNAMES, @prefix.nick, channel, "End of NAMES list"
+          @channels[channel] = Channel.new(channel, self, @prefix)
         end
       end
     end
@@ -98,14 +98,12 @@ module RedmineIRCGateway
       channel, topic, = m.params
       if @channels.key?(channel)
         post @prefix, TOPIC, channel, topic
-        @channels[channel].topic = topic
       end
     end
 
     private
-    def start_observer(m)
-      m.params[0] = config_channel
-      on_join(m)
+    def start_observer()
+      @channels[config_channel] = Console.new(config_channel, self, @prefix, ["@#{owner_user}"])
     end
 
   end
