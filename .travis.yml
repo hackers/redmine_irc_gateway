@@ -1,4 +1,5 @@
-bundler_args: 
+# https://github.com/travis-ci/travis-ci/wiki/.travis.yml-options
+bundler_args: --without development
 script: 'rake rig:test:all'
 
 rvm:
