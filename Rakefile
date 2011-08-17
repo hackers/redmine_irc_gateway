@@ -1,4 +1,7 @@
 require 'bundler/gem_tasks'
+require 'rake/clean'
+
+CLEAN.include('config/test.yml', 'tmp', 'log')
 
 namespace :rig do
   namespace :development do
@@ -11,11 +14,6 @@ namespace :rig do
       sh 'bundle'
       sh 'bundle show'
     end
-  end
-
-  desc 'Cleaning development environments'
-  task :clean do
-    sh 'rm config/test.yml'
   end
 
   namespace :test do
