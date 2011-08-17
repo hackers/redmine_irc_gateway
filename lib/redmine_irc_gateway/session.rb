@@ -95,6 +95,13 @@ module RedmineIRCGateway
       end
     end
 
+    # Set password to Redmine API
+    def on_pass(m)
+      super
+      abort 'Type your password in a IRC server password, and you try to connect again.' if @pass.nil?
+      RedmineIRCGateway::Redmine::API.key = @pass
+    end
+
     private
     def start_observer()
       if !@channels.key?(config_channel)

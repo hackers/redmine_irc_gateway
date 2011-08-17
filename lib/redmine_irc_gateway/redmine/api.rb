@@ -9,12 +9,17 @@ end
 module RedmineIRCGateway
   module Redmine
     class API < ActiveResource::Base
-      config = OpenStruct.new(Pit.get Module.nesting.last.to_s)
-      self.site = config.url
-      self.key  = config.key
-      self.proxy = ENV['http_proxy'] if ENV['http_proxy']
       self.logger = Logger.new STDOUT
       self.logger.level = Logger::ERROR
+      self.proxy = ENV['http_proxy'] if ENV['http_proxy']
+
+      begin
+        config = RedmineIRCGateway::Config.load 'server'
+        self.site = config.site
+      rescue => e
+        self.logger.error e.to_s
+        abort 'Check your config/server.yml settings.'
+      end
 
       class << self
         def find(*args)
@@ -39,5 +44,5 @@ module RedmineIRCGateway
         end
       end
     end
- end
+  end
 end

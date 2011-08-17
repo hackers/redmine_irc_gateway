@@ -15,7 +15,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'rake'
   s.add_dependency 'net-irc'
   s.add_dependency 'activeresource'
-  s.add_dependency 'pit'
   s.add_dependency 'foreverb'
   s.add_dependency 'slop'
 

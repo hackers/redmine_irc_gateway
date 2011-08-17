@@ -4,10 +4,10 @@ $: << File.expand_path('../', __FILE__)
 
 require 'rubygems'
 require 'net/irc'
-require 'pit'
 
 module RedmineIRCGateway
   require 'redmine_irc_gateway/version'
+  require 'redmine_irc_gateway/config'
 
   require 'redmine_irc_gateway/redmine/api'
   require 'redmine_irc_gateway/redmine/project'
@@ -16,7 +16,6 @@ module RedmineIRCGateway
   require 'redmine_irc_gateway/redmine/time_entry'
   require 'redmine_irc_gateway/redmine/version'
 
-  require 'redmine_irc_gateway/config'
   require 'redmine_irc_gateway/message'
   require 'redmine_irc_gateway/session'
   require 'redmine_irc_gateway/server'
