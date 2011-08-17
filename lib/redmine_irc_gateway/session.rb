@@ -1,7 +1,7 @@
 module RedmineIRCGateway
   class Session < Net::IRC::Server::Session
 
-    attr_accessor :config
+    attr_accessor :config, :channels, :prefix
 
     def server_name
       Module.nesting.last.to_s
@@ -86,7 +86,9 @@ module RedmineIRCGateway
 
     private
     def start_observer()
-      @channels[config_channel] = Console.new(config_channel, self, @prefix, [owner_user])
+      if !@channels.key?(config_channel)
+        @channels[config_channel] = Console.new(config_channel, self, @prefix, [owner_user])
+      end
     end
 
   end
