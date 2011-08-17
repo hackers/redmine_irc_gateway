@@ -1,7 +1,7 @@
 module RedmineIRCGateway
   class Session < Net::IRC::Server::Session
 
-    attr_accessor :config
+    attr_accessor :config, :channels, :prefix
 
     def server_name
       Module.nesting.last.to_s
@@ -27,6 +27,7 @@ module RedmineIRCGateway
       super
       @channels = {}
       @config = Pit.get(server_name)
+      @channel_thread = []
     end
 
     def post(*param)
@@ -53,11 +54,14 @@ module RedmineIRCGateway
     end
 
     # join to channel
-    def on_join(m)
-      channels = m.params.first.split(/,/)
+    def on_join(m, channel = nil)
+      channels = channel || m.params.first.split(/,/)
       channels.each do |channel|
         if !@channels.key?(channel)
           @channels[channel] = Channel.new(channel, self, @prefix, [owner_user])
+          @channel_thread << Thread.new do
+            @channels[channel].crowl
+          end
         end
       end
     end
@@ -86,7 +90,9 @@ module RedmineIRCGateway
 
     private
     def start_observer()
-      @channels[config_channel] = Console.new(config_channel, self, @prefix, [owner_user])
+      if !@channels.key?(config_channel)
+        @channels[config_channel] = Console.new(config_channel, self, @prefix, [owner_user])
+      end
     end
 
   end

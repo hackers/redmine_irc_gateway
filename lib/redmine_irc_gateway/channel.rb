@@ -28,16 +28,33 @@ module RedmineIRCGateway
       end
     end
 
+    def crowl
+      loop do
+        Redmine::Issue.watched.each do |issue|
+          privmsg "##{issue.id} [#{issue.project.name}] - #{issue.subject}"
+        end
+
+        Remine::Issue.assigned_me do |issue|
+          privmsg "##{issue.id} [#{issue.project.name}] - #{issue.subject}"
+        end
+
+        sleep 300
+      end
+    end
+
+    def notice(message)
+      post @owner_user, NOTICE, @name, message
+    end
+
+    def privmsg(message)
+      post @owner_user, PRIVMSG, @name, message
+    end
+
     private
-    def on_join(channel, users)
+    def on_join(channel, users = [])
       post @prefix, JOIN, channel
       post nil, RPL_NAMREPLY,   @prefix.nick, "=", channel, users.join(" ")
       post nil, RPL_ENDOFNAMES, @prefix.nick, channel, "End of NAMES list"
     end
-
-    def on_privatemsg
-      @session.on_privmsg
-    end
-
   end
 end
