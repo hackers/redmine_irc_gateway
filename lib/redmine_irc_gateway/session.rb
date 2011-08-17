@@ -26,7 +26,6 @@ module RedmineIRCGateway
     def initialize(*args)
       super
       @channels = {}
-      @config = Pit.get(server_name)
       @channel_thread = []
     end
 
@@ -58,10 +57,16 @@ module RedmineIRCGateway
       channels = channel || m.params.first.split(/,/)
       channels.each do |channel|
         if !@channels.key?(channel)
-          @channels[channel] = Channel.new(channel, self, @prefix, [owner_user])
+          @channels[channel] = Channel.new(channel, @prefix, [owner_user])
           @channel_thread << Thread.new do
-            @channels[channel].crowl
+            loop do
+              @channels[channel].crowl.each { |type,message|
+                post owner_user, type, channel, message
+              }
+              sleep 300
+            end
           end
+          join channel, [owner_user] 
         end
       end
     end
@@ -70,7 +75,9 @@ module RedmineIRCGateway
       channel, message, = m.params
 
       if @channels.key?(channel)
-        @channels[channel].talk message
+        @channels[channel].talk(message).each { |mess|
+          post owner_user, type, channel, message
+        }
       end
     end
 
@@ -91,8 +98,16 @@ module RedmineIRCGateway
     private
     def start_observer()
       if !@channels.key?(config_channel)
-        @channels[config_channel] = Console.new(config_channel, self, @prefix, [owner_user])
+        @channels[config_channel] = Console.new(config_channel, @prefix, [owner_user])
+        join config_channel, [owner_user] 
+        on_join(nil, [owner_channel])
       end
+    end
+
+    def join(channel, users = [])
+      post @prefix, JOIN, channel
+      post nil, RPL_NAMREPLY,   @prefix.nick, "=", channel, users.join(" ")
+      post nil, RPL_ENDOFNAMES, @prefix.nick, channel, "End of NAMES list"
     end
 
   end
