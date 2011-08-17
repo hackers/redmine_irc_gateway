@@ -13,14 +13,14 @@ module RedmineIRCGateway
         on :l, :log,     'log file',                          true,  :as => :string,  :default => nil
         on :d, :debug,   'Enable debug mode',                 false, :as => :boolean, :default => false
         on :v, :version, 'Print the version' do
-          puts RedmineIRCGateway::VERSION
+          puts VERSION
           exit
         end
       end.to_hash
 
-      @opts.each { |key, val|
+      @opts.each do |key, val|
         puts "#{key}: #{val}" if !val.nil?
-      }
+      end
 
       @opts[:logger] = Logger.new STDOUT
       @opts[:logger].level = @opts[:debug] ? Logger::DEBUG : Logger::INFO
