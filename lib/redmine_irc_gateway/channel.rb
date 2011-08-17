@@ -29,8 +29,16 @@ module RedmineIRCGateway
     end
 
     def crowl
-      Redmine::Issue.watched.each do |issue|
-        privmsg "#[#{issue.id}] #{issue.subject}"
+      loop do
+        Redmine::Issue.watched.each do |issue|
+          privmsg "##{issue.id} [#{issue.project.name}] - #{issue.subject}"
+        end
+
+        Remine::Issue.assigned_me do |issue|
+          privmsg "##{issue.id} [#{issue.project.name}] - #{issue.subject}"
+        end
+
+        sleep 300
       end
     end
 
