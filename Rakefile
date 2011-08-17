@@ -8,9 +8,12 @@ namespace :rig do
     desc 'Setup development environments'
     task  :setup do
       sh 'rvm use 1.8.7'
+      sh 'rvm current'
       sh 'rvm gemset create rig'
       sh 'rvm gemset use rig'
+      sh 'rvm current'
       sh 'gem install bundler'
+      sh 'gem list'
       sh 'bundle'
       sh 'bundle show'
     end
