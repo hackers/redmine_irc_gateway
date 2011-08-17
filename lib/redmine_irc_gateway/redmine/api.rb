@@ -14,6 +14,7 @@ module RedmineIRCGateway
       self.key  = config.key
       self.proxy = ENV['http_proxy'] if ENV['http_proxy']
       self.logger = Logger.new STDOUT
+      self.logger.level = Logger::ERROR
 
       class << self
         def find(*args)
