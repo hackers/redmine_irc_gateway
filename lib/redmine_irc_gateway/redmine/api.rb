@@ -18,7 +18,7 @@ module RedmineIRCGateway
         self.site = config.site
       rescue => e
         self.logger.error e.to_s
-        abort 'Check your config/server.yml settings.'
+        self.logger.error 'Check your config/server.yml settings.'
       end
 
       class << self
