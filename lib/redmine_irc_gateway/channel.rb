@@ -28,6 +28,20 @@ module RedmineIRCGateway
       end
     end
 
+    def crowl
+      Redmine::Issue.watched.each do |issue|
+        privmsg "#[#{issue.id}] #{issue.subject}"
+      end
+    end
+
+    def notice(message)
+      post @owner_user, NOTICE, @name, message
+    end
+
+    def privmsg(message)
+      post @owner_user, PRIVMSG, @name, message
+    end
+
     private
     def on_join(channel, users = [])
       post @prefix, JOIN, channel

@@ -20,10 +20,6 @@ module RedmineIRCGateway
       is_authority 
     end
 
-    def notice(message)
-      post @owner_user, NOTICE, @name, message
-    end
-
     def talk(message)
       message.strip!
       if message =~ /^set\s(.+?)\s(.+)/
@@ -39,6 +35,9 @@ module RedmineIRCGateway
       result.each do |r|
         notice r
       end
+    end
+
+    def crowl
     end
 
     private
@@ -74,8 +73,8 @@ module RedmineIRCGateway
     end
 
     def is_authority
-      if !@session.config["url"].nil? && !@session.config["key"].nil? && !@session.channels.key?(@session.owner_channel)
-        @session.channels[@session.owner_channel] = Channel.new(@session.owner_channel, @session, @session.prefix)
+      if !@session.config["url"].nil? && !@session.config["key"].nil?
+        @session.on_join(nil, [@session.owner_channel])
       end
     end
 
