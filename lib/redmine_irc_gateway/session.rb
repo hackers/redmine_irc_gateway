@@ -12,7 +12,7 @@ module RedmineIRCGateway
     end
 
     def server_version
-      RedmineIRCGateway::VERSION
+      VERSION
     end
 
     def owner_channel
@@ -98,8 +98,8 @@ module RedmineIRCGateway
     # Set password to Redmine API
     def on_pass(m)
       super
-      abort 'Type your password in a IRC server password, and you try to connect again.' if @pass.nil?
-      RedmineIRCGateway::Redmine::API.key = @pass
+      #@log.debug 'Type your password in a IRC server password, and you try to connect again.' if @pass.nil?
+      Redmine::API.key = @pass
     end
 
     private
