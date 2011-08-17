@@ -16,6 +16,7 @@ module RedmineIRCGateway
   require 'redmine_irc_gateway/redmine/time_entry'
   require 'redmine_irc_gateway/redmine/version'
 
+  require 'redmine_irc_gateway/config'
   require 'redmine_irc_gateway/message'
   require 'redmine_irc_gateway/session'
   require 'redmine_irc_gateway/server'
