@@ -70,6 +70,7 @@ Tomohiro, TAIRA a.k.a [@Tomohiro](http://twitter.com/Tomohiro) (tomohiro.t@gmail
 
 Naoto, Shingaki a.k.a [@naotos](http://twitter.com/naotos) (n.shingaki@gmail.com)
 
+Ono Yusaku a.k.a [@yono](http://twitter.com/yono) (yono.05@gmail.com)
 
 LICENSE
 -------------------------------------------------------------------------------
