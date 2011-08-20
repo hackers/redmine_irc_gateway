@@ -10,7 +10,7 @@ module RedmineIRCGateway
       def test_project_issues
         my_project = User.current.projects.first
         my_project.issues.each do |i|
-          assert_equal Issue.to_s, i.class.to_s
+          assert_kind_of Issue, i
         end
       end
 
@@ -27,7 +27,7 @@ module RedmineIRCGateway
 
       def test_issue_watched
         Issue.watched.each do |i|
-          assert_equal Issue.to_s, i.class.to_s
+          assert_kind_of Issue, i
         end
       end
 
@@ -37,7 +37,7 @@ module RedmineIRCGateway
 
       def test_user_my_projects
         User.current.projects.each do |p|
-          assert_equal Project.to_s, p.class.to_s
+          assert_kind_of Project, p
         end
       end
 
