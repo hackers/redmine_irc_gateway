@@ -74,7 +74,11 @@ module RedmineIRCGateway
     def on_privmsg(m)
       channel, message, = m.params
 
-      if @channels.key?(channel)
+      if channel == config_channel
+        @channels[config_channel].talk(message).each { |mess|
+          post owner_user, mess.shift, channel, mess.shift
+        }
+      elsif @channels.key?(channel)
         @channels[channel].talk(message).each { |mess|
           post owner_user, NOTICE, channel, mess
         }

@@ -6,9 +6,14 @@ module RedmineIRCGateway
     end
 
     def talk(message)
-      message.strip!
-      result = []
-      result
+      command = message.strip.split(/\s/)
+      Setting.send(command.shift.downcase.to_sym, *command)
+    rescue NoMethodError => e
+      puts e
+      [NOTICE, "COMMAND NOT FOUND"]
+    rescue => e
+      puts e
+      [NOTICE, "COMMAND ERROR"]
     end
 
   end
