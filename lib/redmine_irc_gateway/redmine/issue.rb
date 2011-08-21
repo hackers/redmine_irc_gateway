@@ -12,7 +12,7 @@ module RedmineIRCGateway
       end
 
       def uri
-        "#{Issue.site}/issues/#{@attributes['id']}"
+        "#{Issue.site}/issues/#{@attributes[:id]}"
       end
     end
   end
