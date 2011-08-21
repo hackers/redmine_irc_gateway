@@ -72,30 +72,35 @@ module RedmineIRCGateway
     end
 
     def on_privmsg(m)
-      channel, message, = m.params
+      message = RedmineIRCGateway::Message.parse m
+      channel = message.channel
 
       if channel == config_channel
-        @channels[config_channel].talk(message).each { |mess|
+        @channels[config_channel].talk(message).each do |mess|
           post owner_user, mess.shift, channel, mess.shift
-        }
+        end
       elsif @channels.key?(channel)
-        @channels[channel].talk(message).each { |mess|
+        @channels[channel].talk(message).each do |mess|
           post owner_user, NOTICE, channel, mess
-        }
+        end
       end
     end
 
     def on_notice(m)
-      channel, message, = m.params
+      message = RedmineIRCGateway::Message.parse m
+      channel = message.channel
+
       if @channels.key?(channel)
-        post @prefix.nick, NOTICE, channel, message
+        post @prefix.nick, NOTICE, channel, message.content
       end
     end
 
     def on_topic(m)
-      channel, topic, = m.params
+      message = RedmineIRCGateway::Message.parse m
+      channel = message.channel
+
       if @channels.key?(channel)
-        post @prefix, TOPIC, channel, topic
+        post @prefix, TOPIC, channel, message.content
       end
     end
 
