@@ -10,6 +10,10 @@ module RedmineIRCGateway
           all({:watcher_id => :me})
         end
       end
+
+      def uri
+        "#{Issue.site}/issues/#{@attributes['id']}"
+      end
     end
   end
 end
