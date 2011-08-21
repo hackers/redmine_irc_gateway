@@ -3,14 +3,21 @@ require 'yaml/store'
 
 module RedmineIRCGateway
   class Config < OpenStruct
-    def initialize(name)
+
+    class << self
+      def load name 
+        self.new name
+      end
+    end
+
+    def initialize name
       @name = name
       @path = "#{File.expand_path('../../../config', __FILE__)}/#{@name}.yml"
-      super YAML.load_file(@path)
+      super YAML.load_file @path
     end
 
     def save
-      yaml = YAML::Store.new(@path)
+      yaml = YAML::Store.new @path
       yaml.transaction do
         self.table.each do |k, v|
           yaml[k] = v
@@ -18,10 +25,5 @@ module RedmineIRCGateway
       end
     end
 
-    class << self
-      def load(name)
-        self.new name
-      end
-    end
   end
 end
