@@ -2,52 +2,61 @@ require 'test/test_helper'
 
 module RedmineIRCGateway
   module Redmine
-    class RedmineTest < Test::Unit::TestCase
-      def test_project_class
+    class RedmineTest < ActiveSupport::TestCase
+
+      test 'Check project class' do
         assert_equal 'RedmineIRCGateway::Redmine::Project', Project.to_s
       end
 
-      def test_project_issues
+      test 'Get my project issues' do
         my_project = User.current.projects.first
         my_project.issues.each do |i|
           assert_kind_of Issue, i
         end
       end
 
-      def test_issue_class
+      test 'Check project has member' do
+        user = User.current
+        my_project = user.projects.first
+
+        assert_equal true, my_project.member?(user)
+      end
+
+      test 'Check issue class' do
         assert_equal 'RedmineIRCGateway::Redmine::Issue', Issue.to_s
       end
 
-      def test_issue_assigned_me
+      test 'Get issue assigned me' do
         my_name = User.current.name
         Issue.assigned_me.each do |i|
           assert_equal my_name, i.assigned_to.name
         end
       end
 
-      def test_issue_watched
+      test 'Get issue watched' do
         Issue.watched.each do |i|
           assert_kind_of Issue, i
         end
       end
 
-      def test_user_class
+      test 'Check user class' do
         assert_equal 'RedmineIRCGateway::Redmine::User', User.to_s
       end
 
-      def test_user_my_projects
+      test 'Get my projects' do
         User.current.projects.each do |p|
           assert_kind_of Project, p
         end
       end
 
-      def test_time_entry_class
+      test 'Check time entry class' do
         assert_equal 'RedmineIRCGateway::Redmine::TimeEntry', TimeEntry.to_s
       end
 
-      def test_version_class
+      test 'Check version class' do
         assert_equal 'RedmineIRCGateway::Redmine::Version', Version.to_s
       end
     end
+
   end
 end
