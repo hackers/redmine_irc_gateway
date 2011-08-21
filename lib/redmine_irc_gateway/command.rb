@@ -3,7 +3,11 @@ module RedmineIRCGateway
     extend self
 
     def list
-      Redmine::Issue.assigned_me
+      issues = []
+      Redmine::Issue.assigned_me.each do |i|
+        issues << "[#{i.project.name}] ##{i.id} #{i.subject}"
+      end
+      issues
     end
 
   end

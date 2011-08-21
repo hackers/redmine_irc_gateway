@@ -10,17 +10,12 @@ module RedmineIRCGateway
     end
 
     def talk(message)
-      messages = []
-      if message == 'list'
-        Redmine::Issue.find(:all).each { |i| post @owner_user, PRIVMSG, @name, "4[ #{i.id} ] #{i.subject}" }
-      else
-        begin
-          messages << [PRIVMSG, issue_subject = Redmine::Issue.find(message).subject]
-        rescue
-          issue_subject = 'Not found'
-        end
-      end
-      messages
+      Command.send(message.to_sym)
+    rescue NoMethodError => e
+      puts e
+      ["Command Not Found"]
+    rescue => e
+      ["Command Error"]
     end
 
     def crowl

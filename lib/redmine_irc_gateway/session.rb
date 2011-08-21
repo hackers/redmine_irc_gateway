@@ -76,7 +76,7 @@ module RedmineIRCGateway
 
       if @channels.key?(channel)
         @channels[channel].talk(message).each { |mess|
-          post owner_user, type, channel, message
+          post owner_user, NOTICE, channel, mess
         }
       end
     end
