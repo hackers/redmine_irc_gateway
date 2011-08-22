@@ -71,8 +71,7 @@ module RedmineIRCGateway
       end
     end
 
-    def on_privmsg(m)
-      message = RedmineIRCGateway::Message.parse m
+    def on_privmsg(message)
       channel = message.channel
 
       if channel == config_channel
@@ -80,14 +79,13 @@ module RedmineIRCGateway
           post owner_user, mess.shift, channel, mess.shift
         end
       elsif @channels.key?(channel)
-        @channels[channel].talk(message).each do |mess|
-          post owner_user, NOTICE, channel, mess
+        @channels[channel].talk(message).each do |m|
+          send(:post, *[m[0], NOTICE, channel, m[1]])
         end
       end
     end
 
-    def on_notice(m)
-      message = RedmineIRCGateway::Message.parse m
+    def on_notice(message)
       channel = message.channel
 
       if @channels.key?(channel)
@@ -95,8 +93,7 @@ module RedmineIRCGateway
       end
     end
 
-    def on_topic(m)
-      message = RedmineIRCGateway::Message.parse m
+    def on_topic(message)
       channel = message.channel
 
       if @channels.key?(channel)
