@@ -69,7 +69,7 @@ module RedmineIRCGateway
       end
     end
 
-    def on_privmsg(message)
+    def on_privmsg message
       channel = message.channel
 
       if channel == config_channel
@@ -83,32 +83,17 @@ module RedmineIRCGateway
       end
     end
 
-    def on_notice(message)
-      channel = message.channel
-
-      if @channels.key?(channel)
-        post @prefix.nick, NOTICE, channel, message.content
-      end
-    end
-
-    def on_topic(message)
-      channel = message.channel
-
-      if @channels.key?(channel)
-        post @prefix, TOPIC, channel, message.content
-      end
-    end
-
     # Set password to Redmine API
-    def on_pass(m)
+    def on_pass m
       super
       #@log.debug 'Type your password in a IRC server password, and you try to connect again.' if @pass.nil?
       Redmine::API.key = @pass
     end
 
     private
-    def start_observer()
-      if !@channels.key?(config_channel)
+
+    def start_observer
+      unless @channels.key?(config_channel)
         @channels[config_channel] = Console.new(config_channel, @prefix, [owner_user])
         join config_channel, [owner_user] 
         on_join(nil, [owner_channel])
