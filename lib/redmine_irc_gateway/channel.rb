@@ -10,7 +10,7 @@ module RedmineIRCGateway
     end
 
     def talk(message)
-      Command.send(message.content.to_sym).each do |r|
+      Command.send(message.content.downcase.to_sym).each do |r|
         yield r
       end
     rescue NoMethodError => e
