@@ -58,9 +58,9 @@ module RedmineIRCGateway
           @channels[channel] = Channel.new(channel, @prefix, [owner_user])
           @channel_thread << Thread.new do
             loop do
-              @channels[channel].crowl.each { |type,message|
-                post owner_user, type, channel, message
-              }
+              @channels[channel].crowl do |mess|
+                post owner_user, PRIVMSG, channel, mess
+              end
               sleep 300
             end
           end
@@ -74,7 +74,7 @@ module RedmineIRCGateway
 
       if channel == config_channel
         @channels[config_channel].talk(message).each do |mess|
-          post owner_user, mess.shift, channel, mess.shift
+          send(:post, *[owner_user, NOTICE, channel, mess])
         end
       elsif @channels.key?(channel)
         @channels[channel].talk(message) do |m|

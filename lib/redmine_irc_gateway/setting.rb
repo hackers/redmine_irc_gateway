@@ -5,14 +5,14 @@ module RedmineIRCGateway
 
     def self.help
       commands = [
-        [NOTICE, 'PROJECT  - JOIN PROJECT LIST'],
+        'PROJECT  - JOIN PROJECT LIST',
       ]
     end
 
     def self.project
       project = []
       Redmine::User.current.projects.each do |p|
-        project << [NOTICE, "[#{p.id}] #{p.name}"]
+        project << "[#{p.id}] #{p.name}"
       end
       project
     end

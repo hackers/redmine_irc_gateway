@@ -6,14 +6,20 @@ module RedmineIRCGateway
     end
 
     def talk(message)
-      command = message.strip.split(/\s/)
-      Setting.send(command.shift.downcase.to_sym, *command)
+      command = message.content.split(/\s/)
+      Setting.send(command.shift.downcase.to_sym, *command) do |r|
+        yield r
+      end
     rescue NoMethodError => e
       puts e
-      [NOTICE, "COMMAND NOT FOUND"]
+      yield "Command Not Found"
     rescue => e
       puts e
-      [NOTICE, "COMMAND ERROR"]
+      yield "Command Error"
+    end
+
+    def crowl
+      yield
     end
 
   end

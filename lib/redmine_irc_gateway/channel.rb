@@ -21,16 +21,13 @@ module RedmineIRCGateway
     end
 
     def crowl
-      messages = []
       Redmine::Issue.watched.each do |issue|
-        messages << [PRIVMSG, "##{issue.id} [#{issue.project.name}] - #{issue.subject}"]
+        yield "##{issue.id} [#{issue.project.name}] - #{issue.subject}"
       end
 
       Remine::Issue.assigned_me do |issue|
-        messages << [PRIVMSG, "##{issue.id} [#{issue.project.name}] - #{issue.subject}"]
+        yield "##{issue.id} [#{issue.project.name}] - #{issue.subject}"
       end
-      p messages
-      messages
     end
 
   end
