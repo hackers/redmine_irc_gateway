@@ -10,7 +10,7 @@ module RedmineIRCGateway
     end
 
     def talk(message)
-      Command.send(message.to_sym)
+      Command.send(message.content.to_sym)
     rescue NoMethodError => e
       puts e
       ["Command Not Found"]
