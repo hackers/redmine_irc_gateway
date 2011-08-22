@@ -20,14 +20,8 @@ module RedmineIRCGateway
       yield [@owner_user, "Command Error"]
     end
 
-    def crowl
-      Redmine::Issue.watched.each do |issue|
-        yield "##{issue.id} [#{issue.project.name}] - #{issue.subject}"
-      end
-
-      Remine::Issue.assigned_me do |issue|
-        yield "##{issue.id} [#{issue.project.name}] - #{issue.subject}"
-      end
+    def crawl
+      Command.all.each { |i| yield i }
     end
 
   end

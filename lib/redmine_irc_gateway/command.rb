@@ -2,22 +2,23 @@ module RedmineIRCGateway
   module Command
     extend self
 
+    def all
+      Redmine::Issue.all.collect { |i| build_issue_description(i) }
+    end
+
     def list
-      issues = []
-      Redmine::Issue.assigned_me.each do |i|
-        issues << [i.author.name.gsub(' ', ''), "[#{i.project.name}] ##{i.id} #{i.subject} #{i.uri}"]
-        #issues << "[#{i.project.name}] ##{i.id} #{i.subject} #{i.uri}"
-      end
-      issues
+      Redmine::Issue.assigned_me.collect { |i| build_issue_description(i) }
     end
 
     def watch
-      issues = []
-      Redmine::Issue.watched.each do |i|
-        issues << [i.author.name.gsub(' ', ''), "[#{i.project.name}] ##{i.id} #{i.subject} #{i.uri}"]
-      end
-      issues
+      Redmine::Issue.watched.collect { |i| build_issue_description(i) }
     end
 
+    def build_issue_description issue
+      [
+        issue.author.name.gsub(' ', ''),
+        "[#{issue.project.name}] ##{issue.id} #{issue.subject} #{issue.uri}"
+      ]
+    end
   end
 end

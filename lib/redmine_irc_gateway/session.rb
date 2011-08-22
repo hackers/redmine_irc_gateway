@@ -58,8 +58,8 @@ module RedmineIRCGateway
           @channels[channel] = Channel.new(channel, @prefix, [owner_user])
           @channel_thread << Thread.new do
             loop do
-              @channels[channel].crowl do |mess|
-                post owner_user, PRIVMSG, channel, mess
+              @channels[channel].crawl do |m|
+                send(:post, *[m[0], PRIVMSG, channel, m[1]])
               end
               sleep 300
             end
