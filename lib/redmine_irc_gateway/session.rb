@@ -45,11 +45,9 @@ module RedmineIRCGateway
     # logout from server
     def on_disconnected
       @channels.each do |chan, _ins|
-        begin
-          _ins.observer.kill if _ins.observer
-        rescue
-        end
+        _ins.observer.kill if _ins.observer
       end
+    rescue
     end
 
     # join to channel
@@ -79,7 +77,7 @@ module RedmineIRCGateway
           post owner_user, mess.shift, channel, mess.shift
         end
       elsif @channels.key?(channel)
-        @channels[channel].talk(message).each do |m|
+        @channels[channel].talk(message) do |m|
           send(:post, *[m[0], NOTICE, channel, m[1]])
         end
       end

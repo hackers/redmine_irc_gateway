@@ -1,7 +1,7 @@
 module RedmineIRCGateway
   class Channel
 
-    include Net::IRC::Constants 
+    include Net::IRC::Constants
 
     def initialize(channel, prefix, users = [])
       @prefix = prefix
@@ -10,12 +10,14 @@ module RedmineIRCGateway
     end
 
     def talk(message)
-      Command.send(message.content.to_sym)
+      Command.send(message.content.to_sym).each do |r|
+        yield r
+      end
     rescue NoMethodError => e
       puts e
-      ["Command Not Found"]
+      yield ["Command Not Found"]
     rescue => e
-      ["Command Error"]
+      yield ["Command Error"]
     end
 
     def crowl
