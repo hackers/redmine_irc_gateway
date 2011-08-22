@@ -5,6 +5,8 @@ $: << File.expand_path('../', __FILE__)
 require 'rubygems'
 require 'net/irc'
 
+require 'lib/net/irc/message'
+
 module RedmineIRCGateway
   require 'redmine_irc_gateway/version'
   require 'redmine_irc_gateway/config'
