@@ -8,20 +8,8 @@ module RedmineIRCGateway
       @channel, @content = @params
     end
 
-    # TODO
-    def privmsg m
-      @command = PRIVMSG
-    end
-
-
-    # TODO
-    def notice m
-      @command = NOTICE
-    end
-
-    # TODO
-    def topic m
-      @command = TOPIC
+    def order
+      @content.downcase.to_sym
     end
 
   end

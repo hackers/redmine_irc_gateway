@@ -1,8 +1,6 @@
 module RedmineIRCGateway
   class Channel
 
-    include Net::IRC::Constants
-
     def initialize(channel, prefix, users = [])
       @prefix = prefix
       @name = channel
@@ -10,7 +8,7 @@ module RedmineIRCGateway
     end
 
     def talk(message)
-      Command.send(message.content.downcase.to_sym).each do |r|
+      Order.send(message.order).each do |r|
         yield r
       end
     rescue NoMethodError => e
@@ -21,7 +19,7 @@ module RedmineIRCGateway
     end
 
     def crawl
-      Command.all.each { |i| yield i }
+      Order.all.each { |i| yield i }
     end
 
   end
