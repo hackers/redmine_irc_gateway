@@ -14,5 +14,6 @@ module RedmineIRCGateway
     test 'Call uknown command' do
       assert_raise(NoMethodError) { Command.unknown_method }
     end
+
   end
 end
