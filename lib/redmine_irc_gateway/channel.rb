@@ -13,9 +13,9 @@ module RedmineIRCGateway
       end
     rescue NoMethodError => e
       puts e
-      yield [@owner_user, "Command Not Found"]
+      yield [@owner_user, "Order Not Found"]
     rescue => e
-      yield [@owner_user, "Command Error"]
+      yield [@owner_user, "Order Error"]
     end
 
     def crawl
