@@ -1,3 +1,6 @@
+$: << File.expand_path('../../lib', __FILE__)
+$: << File.expand_path('../../test', __FILE__)
+
 require 'test/unit'
 require 'redmine_irc_gateway'
 
