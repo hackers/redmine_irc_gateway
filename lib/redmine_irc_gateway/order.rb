@@ -14,6 +14,10 @@ module RedmineIRCGateway
       Redmine::Issue.watched.reverse.collect { |i| build_issue_description(i) }
     end
 
+    def online_users project_id
+      self.all.reverse.collect { |i| i.first }
+    end
+
     def build_issue_description issue
       [
         issue.author.name.gsub(' ', ''),

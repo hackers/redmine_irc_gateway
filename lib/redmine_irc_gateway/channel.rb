@@ -3,10 +3,10 @@ module RedmineIRCGateway
 
     attr_reader :name, :users, :project_id
 
-    def initialize(name, users = [])
-      @name = name
-      @users = users
-      @owner_user = users.first
+    def initialize(name, project_id, users = [])
+      @name       = "##{name}"
+      @users      = users
+      @project_id = project_id
     end
 
     def talk(message)
@@ -15,9 +15,9 @@ module RedmineIRCGateway
       end
     rescue NoMethodError => e
       puts e
-      yield [@owner_user, "Order Not Found"]
+      yield [@name, "Order Not Found"]
     rescue => e
-      yield [@owner_user, "Order Error"]
+      yield [@name, "Order Error"]
     end
 
   end
