@@ -1,9 +1,11 @@
 module RedmineIRCGateway
   class Channel
 
-    def initialize(channel, prefix, users = [])
-      @prefix = prefix
-      @name = channel
+    attr_reader :name, :users, :project_id
+
+    def initialize(name, users = [])
+      @name = name
+      @users = users
       @owner_user = users.first
     end
 
@@ -16,10 +18,6 @@ module RedmineIRCGateway
       yield [@owner_user, "Order Not Found"]
     rescue => e
       yield [@owner_user, "Order Error"]
-    end
-
-    def crawl
-      Order.all.each { |i| yield i }
     end
 
   end
