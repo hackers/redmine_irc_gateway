@@ -63,6 +63,12 @@ If you want to use debug mode, add the `--debug` option. like this.
     $ bin/rig restart
 
 
+IRC Channel
+-------------------------------------------------------------------------------
+
+`#rig@irc.freenode.net`
+
+
 Authors
 -------------------------------------------------------------------------------
 
