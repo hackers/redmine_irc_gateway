@@ -3,15 +3,15 @@ module RedmineIRCGateway
     extend self
 
     def all
-      Redmine::Issue.all.collect { |i| build_issue_description(i) }
+      Redmine::Issue.all.reverse.collect { |i| build_issue_description(i) }
     end
 
     def list
-      Redmine::Issue.assigned_me.collect { |i| build_issue_description(i) }
+      Redmine::Issue.assigned_me.reverse.collect { |i| build_issue_description(i) }
     end
 
     def watch
-      Redmine::Issue.watched.collect { |i| build_issue_description(i) }
+      Redmine::Issue.watched.reverse.collect { |i| build_issue_description(i) }
     end
 
     def build_issue_description issue
