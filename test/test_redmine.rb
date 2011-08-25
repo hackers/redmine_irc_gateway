@@ -4,10 +4,6 @@ module RedmineIRCGateway
   module Redmine
     class RedmineTest < ActiveSupport::TestCase
 
-      test 'Check project class' do
-        assert_equal 'RedmineIRCGateway::Redmine::Project', Project.to_s
-      end
-
       test 'Get my project issues' do
         my_project = User.current.projects.first
         my_project.issues.each do |i|
@@ -20,23 +16,6 @@ module RedmineIRCGateway
         my_project = user.projects.first
 
         assert_equal true, my_project.member?(user)
-      end
-
-      test 'Check issue class' do
-        assert_equal 'RedmineIRCGateway::Redmine::Issue', Issue.to_s
-      end
-
-      test 'Get issue assigned me' do
-        my_name = User.current.name
-        Issue.assigned_me.each do |i|
-          assert_equal my_name, i.assigned_to.name
-        end
-      end
-
-      test 'Get issue watched' do
-        Issue.watched.each do |i|
-          assert_kind_of Issue, i
-        end
       end
 
       test 'Check user class' do
