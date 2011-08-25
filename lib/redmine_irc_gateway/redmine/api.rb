@@ -28,7 +28,7 @@ module RedmineIRCGateway
           api_key = { :key => API.key }
 
           if options[:params]
-            options[:params] = options[:params].merge! api_key
+            options[:params].merge! api_key
           else
             options[:params] = api_key
           end
