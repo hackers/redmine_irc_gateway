@@ -4,7 +4,7 @@ module RedmineIRCGateway
     attr_reader :name, :users, :project_id, :topic
 
     @@channels = {}
-    @@names = [:rig]
+    @@names = []
 
     def initialize(name, project_id, users = [], topic = nil)
       @name       = "##{name}"
@@ -14,9 +14,15 @@ module RedmineIRCGateway
     end
 
     class << self
+
+      # main channel
+      def main
+        self.new :Redmine, '00'
+      end
+
       # Return all channel names
       def names
-        @@names
+        @@names + Redmine::User.current.projects.collect { |p| p.id }
       end
 
       # Return all channel instances
@@ -27,19 +33,20 @@ module RedmineIRCGateway
 
       # Add channel instance to stack
       def add channel
-        @@channels[channel.name] = channel
+        @@channels[channel.project_id] = channel
       end
 
       # Find channel instance at stack
-      def find channel_name
-        @@channels[channel_name]
+      def find project_id
+        @@channels[project_id]
       end
 
       # Return find or create channel instance
-      def get channel_name
-        channel = self.find channel_name
+      def get project_id
+        channel = self.find project_id
         unless channel
-          channel = self.new(channel_name, 'dummy_projet_id', Redmine.online_users('dummy project_id'))
+          project = Redmine::Project.find project_id
+          channel = self.new(project.identifier, project_id, Redmine.online_users(project_id))
         end
         channel
       end

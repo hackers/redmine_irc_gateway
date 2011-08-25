@@ -46,16 +46,16 @@ module RedmineIRCGateway
 
     def auto_join_to_channels
       @console = Console.new
-      join @console
+      @main    = Channel.main
 
-      Channel.all.each { |channel| join channel }
+      ([@console, @main] + Channel.all).each { |channel| join channel }
     rescue => e
       @log.error e
     end
 
     def join(channel)
       post(@prefix, JOIN, channel.name)
-      post(nil, RPL_NAMREPLY,   @prefix.nick, "=", channel.name, channel.users.join(' '))
+      post(nil, RPL_NAMREPLY,   @prefix.nick, '=', channel.name, channel.users.join(' '))
       post(nil, RPL_ENDOFNAMES, @prefix.nick, channel.name, 'End of NAMES list')
     end
 
@@ -63,8 +63,10 @@ module RedmineIRCGateway
       Thread.new do
         loop do
           Redmine.all.each do |issue|
-            Channel.all.each do |channel|
-              send(:post, *[issue[0], PRIVMSG, channel.name, issue[1]])
+            send(:post, *[issue.author, PRIVMSG, @main.name, issue.content])
+
+            if channel = Channel.find(issue.project_id)
+              send(:post, *[issue.author, PRIVMSG, channel.name, issue.content])
             end
           end
           sleep 300
@@ -75,8 +77,8 @@ module RedmineIRCGateway
     end
 
     def talk(message)
-      Redmine.send(message.order).each do |response|
-        yield [response[0], NOTICE, message.channel, response[1]]
+      Redmine.send(message.order).each do |issue|
+        yield [issue.author, NOTICE, message.channel, issue.content]
       end
     rescue NoMethodError => e
       @log.error e

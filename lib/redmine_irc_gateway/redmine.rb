@@ -15,14 +15,15 @@ module RedmineIRCGateway
     end
 
     def online_users project_id
-      self.all.reverse.collect { |i| i.first }
+      Project.find(project_id).issues.collect { |i| i.author.name.gsub(' ', '') }
     end
 
     def build_issue_description issue
-      [
-        issue.author.name.gsub(' ', ''),
-        "[#{issue.project.name}] ##{issue.id} #{issue.subject} #{issue.uri}"
-      ]
+      OpenStruct.new({
+        :author     => issue.author.name.gsub(' ', ''),
+        :project_id => issue.project.id,
+        :content    => "[#{issue.project.name}] ##{issue.id} #{issue.subject} #{issue.uri}"
+      })
     end
   end
 end
