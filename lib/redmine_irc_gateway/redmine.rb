@@ -1,5 +1,5 @@
 module RedmineIRCGateway
-  module Order
+  module Redmine
     extend self
 
     def all

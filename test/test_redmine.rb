@@ -56,7 +56,19 @@ module RedmineIRCGateway
       test 'Check version class' do
         assert_equal 'RedmineIRCGateway::Redmine::Version', Version.to_s
       end
-    end
 
+      test 'Load order module' do
+        assert_kind_of Module, Redmine
+      end
+
+      test 'Call list order' do
+        assert_kind_of Array, Redmine.list
+      end
+
+      test 'Call uknown order' do
+        assert_raise(NoMethodError) { Redmine.unknown_method }
+      end
+
+    end
   end
 end
