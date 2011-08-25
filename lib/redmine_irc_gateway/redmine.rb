@@ -20,9 +20,16 @@ module RedmineIRCGateway
 
     def build_issue_description issue
       OpenStruct.new({
-        :author     => issue.author.name.gsub(' ', ''),
-        :project_id => issue.project.id,
-        :content    => "[#{issue.project.name}] ##{issue.id} #{issue.subject} #{issue.uri}"
+        :author       => issue.author.name.gsub(' ', ''),
+        :project_id   => issue.project.id,
+        :project_name => "4#{issue.project.name} ",
+        :content      => [
+                          "2#{issue.tracker.name}",
+                          "3#{issue.status.name}",
+                          "#{issue.subject}",
+                          "14(#{issue.done_ratio}%)",
+                          "#{issue.uri}"
+                         ].join(' ')
       })
     end
   end
