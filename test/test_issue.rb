@@ -8,6 +8,12 @@ module RedmineIRCGateway
         assert_equal 'RedmineIRCGateway::Redmine::Issue', Issue.to_s
       end
 
+      test 'Get all issues' do
+        Issue.all.each do |i|
+          assert_kind_of Issue, i
+        end
+      end
+
       test 'Get issue assigned me' do
         my_name = User.current.name
         Issue.assigned_me.each do |i|
