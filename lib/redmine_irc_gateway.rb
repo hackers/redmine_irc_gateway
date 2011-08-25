@@ -11,6 +11,7 @@ module RedmineIRCGateway
   require 'redmine_irc_gateway/version'
   require 'redmine_irc_gateway/config'
 
+  require 'redmine_irc_gateway/redmine'
   require 'redmine_irc_gateway/redmine/api'
   require 'redmine_irc_gateway/redmine/project'
   require 'redmine_irc_gateway/redmine/issue'
@@ -19,7 +20,6 @@ module RedmineIRCGateway
   require 'redmine_irc_gateway/redmine/version'
 
   require 'redmine_irc_gateway/message'
-  require 'redmine_irc_gateway/order'
   require 'redmine_irc_gateway/session'
   require 'redmine_irc_gateway/server'
   require 'redmine_irc_gateway/channel'
