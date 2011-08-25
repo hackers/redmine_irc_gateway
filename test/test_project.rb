@@ -2,7 +2,7 @@ require 'test/test_helper'
 
 module RedmineIRCGateway
   module Redmine
-    class RedmineTest < ActiveSupport::TestCase
+    class ProjectTest < ActiveSupport::TestCase
 
       test 'Check project class' do
         assert_equal 'RedmineIRCGateway::Redmine::Project', Project.to_s
