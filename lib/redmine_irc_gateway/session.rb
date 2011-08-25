@@ -9,7 +9,7 @@ module RedmineIRCGateway
       VERSION
     end
 
-    # login to server
+    # Login to server
     def on_user message
       if @pass.nil?
         post(server_name, ERR_NEEDMOREPARAMS, @nick, 'Type your password in a IRC server password, and you try to connect again.')
@@ -18,22 +18,17 @@ module RedmineIRCGateway
 
       super
 
-      auto_join_to_channels
-      run_timeline_thread
+      auto_join_to_channels && crawl_recent_issues
     end
 
+    # Receive message and response
     def on_privmsg message
-      channel = message.channel
-      channel_key = channel.gsub('#', '').to_sym
-
-      if channel == @console.name
+      if message.channel == @console.name
         @console.talk(message).each do |mess|
           send(:post, *[@console.operator, NOTICE, channel, mess])
         end
-      elsif @channels.key?(channel_key)
-        @channels[channel_key].talk(message) do |m|
-          send(:post, *[m[0], NOTICE, channel, m[1]])
-        end
+      else
+        talk(message) { |response| send(:post, *response) }
       end
     end
 
@@ -50,24 +45,12 @@ module RedmineIRCGateway
     private
 
     def auto_join_to_channels
-      @channels = {}
-
       @console = Console.new
       join @console
 
-      channel_names = [:rig]
-      channel_names.each { |name| create_and_join_to_channel name  }
+      Channel.all.each { |channel| join channel }
     rescue => e
       @log.error e
-    end
-
-    def create_and_join_to_channel(channel_name)
-      unless @channels.key? channel_name
-        channel = Channel.new(channel_name, 'dummy_projet_id', Order.online_users('dummy project_id'))
-        @channels[channel_name] = channel
-      end
-
-      join @channels[channel_name]
     end
 
     def join(channel)
@@ -76,17 +59,28 @@ module RedmineIRCGateway
       post(nil, RPL_ENDOFNAMES, @prefix.nick, channel.name, 'End of NAMES list')
     end
 
-    def run_timeline_thread
+    def crawl_recent_issues
       Thread.new do
         loop do
-          Order.all.each do |issue|
-            @channels.each do |channel_name, channel|
+          Redmine.all.each do |issue|
+            Channel.all.each do |channel|
               send(:post, *[issue[0], PRIVMSG, channel.name, issue[1]])
             end
           end
           sleep 300
         end
       end
+    rescue => e
+      @log.error e
+    end
+
+    def talk(message)
+      Redmine.send(message.order).each do |response|
+        yield [response[0], NOTICE, message.channel, response[1]]
+      end
+    rescue NoMethodError => e
+      @log.error e
+      yield [nil, NOTICE, message.channel, 'Command Not Found']
     rescue => e
       @log.error e
     end
