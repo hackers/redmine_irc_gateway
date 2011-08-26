@@ -1,1 +1,4 @@
-ChannelName: RedmineProjectId 
+channels:
+  ChannelName1: RedmineProjectId1
+  ChannelName2: RedmineProjectId2
+  ChannelName3: RedmineProjectId3
