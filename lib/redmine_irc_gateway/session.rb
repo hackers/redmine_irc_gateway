@@ -68,8 +68,6 @@ module RedmineIRCGateway
           Redmine.all.each do |issue|
             send(:post, *[issue.author, PRIVMSG, @main.name, "#{issue.project_name} #{issue.content}"])
 
-	      puts issue.project_id
-	      p Channel.all
             if channel = Channel.find(issue.project_id)
               send(:post, *[issue.author, PRIVMSG, channel.name, issue.content])
             end
