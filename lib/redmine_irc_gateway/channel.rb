@@ -22,12 +22,12 @@ module RedmineIRCGateway
 
       # Return all channel names
       def names
-        @@names + Redmine::User.current.projects.collect { |p| p.id }
+        self.load('channel')
       end
 
       # Return all channel instances
       def all
-        self.names.each { |name| self.add(self.get(name)) }
+        self.names.each { |name, val| self.add(self.get(name, val.to_s)) }
         @@channels.values
       end
 
@@ -42,13 +42,16 @@ module RedmineIRCGateway
       end
 
       # Return find or create channel instance
-      def get project_id
+      def get channel_name, project_id
         channel = self.find project_id
         unless channel
-          project = Redmine::Project.find project_id
-          channel = self.new(project.identifier, project_id, Redmine.online_users(project_id))
+          channel = self.new(channel_name, project_id, Redmine.online_users(project_id))
         end
         channel
+      end
+
+      def load name
+         Config.load(name).channels
       end
 
     end
