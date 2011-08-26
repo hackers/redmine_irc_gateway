@@ -4,7 +4,6 @@ module RedmineIRCGateway
     attr_reader :name, :users, :project_id, :topic
 
     @@channels = {}
-    @@names = []
 
     def initialize(name, project_id, users = [], topic = nil)
       @name       = "##{name}"
@@ -22,12 +21,12 @@ module RedmineIRCGateway
 
       # Return all channel names
       def names
-        self.load('channel')
+        Config.load('channel').channels
       end
 
       # Return all channel instances
       def all
-        self.names.each { |name, val| self.add(self.get(name, val.to_s)) }
+        self.names.each { |n, val| self.add(self.get(name, val.to_s)) }
         @@channels.values
       end
 
@@ -48,10 +47,6 @@ module RedmineIRCGateway
           channel = self.new(channel_name, project_id, Redmine.online_users(project_id))
         end
         channel
-      end
-
-      def load name
-         Config.load(name).channels
       end
 
     end
