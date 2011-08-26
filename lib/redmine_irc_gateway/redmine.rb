@@ -16,7 +16,11 @@ module RedmineIRCGateway
 
     def online_users project_id
       issues = Project.find(project_id).issues
-      issues.collect { |i| i.author.name.gsub(' ', '') }.uniq if issues
+      if issues
+        authors = issues.collect { |i| i.author.name.gsub(' ', '') }
+        members = issues.collect { |i| i.assigned_to.name.gsub(' ', '') if defined? i.assigned_to }
+        (authors + members).uniq
+      end
     end
 
     def build_issue_description issue
