@@ -1,6 +1,7 @@
 module RedmineIRCGateway
   module Redmine
     class User < API
+
       class << self
         def current
           find(:current)
@@ -8,7 +9,7 @@ module RedmineIRCGateway
       end
 
       def name
-        "#{@attributes[:lastname]} #{@attributes[:firstname]}"
+        "#{@attributes[:lastname]}#{@attributes[:firstname]}"
       end
 
       def projects

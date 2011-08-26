@@ -16,7 +16,7 @@ module RedmineIRCGateway
 
     def online_users project_id
       issues = Project.find(project_id).issues
-      (issues.collect { |i| i.author.name.gsub(' ', '') }).uniq if issues
+      issues.collect { |i| i.author.name.gsub(' ', '') }.uniq if issues
     end
 
     def build_issue_description issue
@@ -29,7 +29,7 @@ module RedmineIRCGateway
                           "3#{issue.status.name}",
                           "#{issue.subject}",
                           "14(#{issue.done_ratio}%)",
-                          "#{issue.uri}"
+                          "15#{issue.uri}"
                          ].join(' ')
       })
     end
