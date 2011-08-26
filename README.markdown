@@ -38,20 +38,24 @@ Installation
 
 How to use
 -------------------------------------------------------------------------------
-### Make Config file
 
-create config
+### Make configuration file
+
+Rename configuration files
 
     mv config/server.yml.example config/server.yml
     mv config/channel.yml.example config/channel.yml
 
-modify config/server.yml
+Edit config/server.yml
 
     site: ${REDMINE_URI}
 
-modify config/channel.yml
+Add channel setting to config/channel.yml
 
     channels:
+        ChannelName: project id
+        AwsomeProject: 777
+
 
 ### Run, and stay on top
 
@@ -77,18 +81,24 @@ If you want to use debug mode, add the `--debug` option. like this.
     $ bin/rig restart
 
 
+### Cleaning environment
+
+    $ rake clean
+
+
 IRC Channel
 -------------------------------------------------------------------------------
 
-`#rig@irc.freenode.net`
+`#rig` at Freenode.net
 
 
-Authors
+Contributors
 -------------------------------------------------------------------------------
 
 Tomohiro, TAIRA a.k.a [@Tomohiro](http://twitter.com/Tomohiro) (tomohiro.t@gmail.com)
 
 Naoto, Shingaki a.k.a [@naotos](http://twitter.com/naotos) (n.shingaki@gmail.com)
+
 
 LICENSE
 -------------------------------------------------------------------------------
