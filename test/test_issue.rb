@@ -15,9 +15,9 @@ module RedmineIRCGateway
       end
 
       test 'Get issue assigned me' do
-        my_name = User.current.name
+        id = User.current.id
         Issue.assigned_me.each do |i|
-          assert_equal my_name, i.assigned_to.name
+          assert_equal id, i.assigned_to.id
         end
       end
 
