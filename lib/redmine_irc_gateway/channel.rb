@@ -26,7 +26,7 @@ module RedmineIRCGateway
 
       # Return all channel instances
       def all
-        self.names.each { |n, val| self.add(self.get(name, val.to_s)) }
+        self.names.each { |name, val| self.add(self.get(name, val.to_s)) }
         @@channels.values
       end
 
