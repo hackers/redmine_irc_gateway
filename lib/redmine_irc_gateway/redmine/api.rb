@@ -1,14 +1,9 @@
 require 'active_resource'
 
-class ActiveResource::Base
-  class << self
-    attr_accessor :key
-  end
-end
-
 module RedmineIRCGateway
   module Redmine
     class API < ActiveResource::Base
+
       self.logger = Logger.new STDOUT
       self.logger.level = Logger::ERROR
       self.proxy = ENV['http_proxy'] if ENV['http_proxy']
@@ -22,6 +17,9 @@ module RedmineIRCGateway
       end
 
       class << self
+
+        attr_accessor :key
+
         def find(*args)
           scope   = args.slice!(0)
           options = args.slice!(0) || {}
@@ -42,6 +40,7 @@ module RedmineIRCGateway
         def all(params = nil)
           super({ :params => params })
         end
+
       end
     end
   end
