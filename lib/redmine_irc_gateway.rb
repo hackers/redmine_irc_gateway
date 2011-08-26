@@ -6,7 +6,7 @@ require 'rubygems'
 require 'net/irc'
 
 require 'lib/net/irc/message'
-require 'lib/active_support/core_ext/object/to_query'
+require 'lib/activesupport/core_ext/object/to_query'
 
 
 module RedmineIRCGateway
