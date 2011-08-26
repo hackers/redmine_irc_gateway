@@ -3,19 +3,20 @@ module RedmineIRCGateway
     extend self
 
     def all
-      Redmine::Issue.all.reverse.collect { |i| build_issue_description(i) }
+      Issue.all.reverse.collect { |i| build_issue_description(i) }
     end
 
     def list
-      Redmine::Issue.assigned_me.reverse.collect { |i| build_issue_description(i) }
+      Issue.assigned_me.reverse.collect { |i| build_issue_description(i) }
     end
 
     def watch
-      Redmine::Issue.watched.reverse.collect { |i| build_issue_description(i) }
+      Issue.watched.reverse.collect { |i| build_issue_description(i) }
     end
 
     def online_users project_id
-      Project.find(project_id).issues.collect { |i| i.author.name.gsub(' ', '') }
+      issues = Project.find(project_id).issues
+      (issues.collect { |i| i.author.name.gsub(' ', '') }).uniq if issues
     end
 
     def build_issue_description issue

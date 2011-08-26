@@ -12,13 +12,16 @@ module RedmineIRCGateway
     # Login to server
     def on_user message
       if @pass.nil?
-        post(server_name, ERR_NEEDMOREPARAMS, @nick, 'Type your password in a IRC server password, and you try to connect again.')
+        post(server_name, ERR_NEEDMOREPARAMS, @nick,
+             'Type your password in a IRC server password, and you try to connect again.')
         return finish
       end
 
       super
 
-      auto_join_to_channels && crawl_recent_issues
+      auto_join_to_channels
+
+      crawl_recent_issues
     end
 
     # Receive message and response
