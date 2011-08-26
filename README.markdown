@@ -38,6 +38,20 @@ Installation
 
 How to use
 -------------------------------------------------------------------------------
+### Make Config file
+
+create config
+
+    mv config/server.yml.exmaple config/server.yml
+    mv config/channel.yml.example config/channel.yml
+
+modify config/server.yml
+
+    site: ${REDMINE_URI}
+
+modify config/channel.yml
+
+    channels:
 
 ### Run, and stay on top
 
