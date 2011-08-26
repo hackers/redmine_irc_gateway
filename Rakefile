@@ -1,7 +1,7 @@
 require 'bundler/gem_tasks'
 require 'rake/clean'
 
-CLEAN.include('config/test.yml', 'tmp', 'log')
+CLEAN.include('config/test.yml', 'tmp', 'log', '/tmp/rig_issues.*')
 
 namespace :rig do
   namespace :development do
