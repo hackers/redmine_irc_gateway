@@ -41,8 +41,17 @@ module RedmineIRCGateway
       Redmine::API.key = @pass
     end
 
+    # Disallow join to a channel
     def on_join message
       post(server_name, ERR_INVITEONLYCHAN, @nick, 'Invite only')
+    end
+
+    # To clear the issue database on disconnect
+    def on_disconnected
+      db = SDBM.open DB_PATH
+      db.clear
+      db.close
+      @log.info 'Database cleared'
     end
 
     private
@@ -72,7 +81,7 @@ module RedmineIRCGateway
               send(:post, *[issue.author, PRIVMSG, channel.name, issue.content])
             end
           end
-          sleep 300
+          sleep 30
         end
       end
     rescue => e
@@ -85,7 +94,7 @@ module RedmineIRCGateway
       end
     rescue NoMethodError => e
       @log.error e
-      yield [nil, NOTICE, message.channel, 'Command Not Found']
+      yield [@console.operator, NOTICE, message.channel, 'Command not found']
     rescue => e
       @log.error e
     end

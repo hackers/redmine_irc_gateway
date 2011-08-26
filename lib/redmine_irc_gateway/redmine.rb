@@ -3,7 +3,23 @@ module RedmineIRCGateway
     extend self
 
     def all
-      Issue.all.reverse.collect { |i| build_issue_description(i) }
+      db = SDBM.open DB_PATH
+      issues = []
+      Issue.all.reverse.each do |i|
+        if db.include? i.id
+          next if db[i.id] == i.updated_on
+          db[i.id] = i.updated_on
+          issues << build_issue_description(i, :update)
+        else
+          db[i.id] = i.updated_on
+          issues << build_issue_description(i)
+        end
+      end
+      issues
+    rescue => e
+      puts e
+    ensure
+      db.close
     end
 
     def list
@@ -23,19 +39,22 @@ module RedmineIRCGateway
       end
     end
 
-    def build_issue_description issue
+    def build_issue_description issue, updated = false
       OpenStruct.new({
         :author       => issue.author.name.gsub(' ', ''),
         :project_id   => issue.project.id,
-        :project_name => "4#{issue.project.name} ",
+        :project_name => issue.project.name,
         :content      => [
-                          "2#{issue.tracker.name}",
+                          updated ? "4Up!" : nil,
+                          issue.tracker.name,
                           "3#{issue.status.name}",
+                          "6#{issue.priority.name}",
                           "#{issue.subject}",
                           "14(#{issue.done_ratio}%)",
-                          "15#{issue.uri}"
+                          "14#{issue.uri}"
                          ].join(' ')
       })
     end
+
   end
 end

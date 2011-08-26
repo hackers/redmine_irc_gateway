@@ -2,6 +2,8 @@
 
 $: << File.expand_path('../', __FILE__)
 
+require 'sdbm'
+
 require 'rubygems'
 require 'net/irc'
 
@@ -10,6 +12,9 @@ require 'lib/activesupport/core_ext/object/to_query'
 
 
 module RedmineIRCGateway
+
+  DB_PATH = '/tmp/rig_issues.db'
+
   require 'redmine_irc_gateway/version'
   require 'redmine_irc_gateway/config'
 
