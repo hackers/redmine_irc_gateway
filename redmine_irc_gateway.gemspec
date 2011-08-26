@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.email       = ['tomohiro.t@gmail.com', 'n.shingaki@gmail.com']
   s.homepage    = 'http://github.com/hackers/redmine_irc_gateway'
   s.summary     = %q{Redmine IRC Gateway}
-  s.description = %q{This project privides an access to Redmine API via IRC Gateway.}
+  s.description = %q{This project provides an access to Redmine API via IRC Gateway.}
 
   s.rubyforge_project = 'redmine_irc_gateway'
 

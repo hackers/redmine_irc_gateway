@@ -7,7 +7,7 @@ Overview
 
 ### What's this?
 
-This project privides an access to Redmine API via IRC Gateway.
+This project provides an access to Redmine API via IRC Gateway.
 But, yet not working ;-p
 
 
