@@ -8,7 +8,7 @@ module RedmineIRCGateway
 
     def initialize(name, project_id, users = [], topic = nil)
       @name       = "##{name}"
-      @users      = users
+      @users      = users || []
       @project_id = project_id
       @topic      = topic
     end
