@@ -51,6 +51,13 @@ module RedmineIRCGateway
         channel
       end
 
+      def load
+         channel = Config.load("channel")
+         channel.each do |cn, pi|
+           self.new cn, pi
+	 end
+      end
+
     end
   end
 end
