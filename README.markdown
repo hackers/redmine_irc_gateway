@@ -42,7 +42,7 @@ How to use
 
 create config
 
-    mv config/server.yml.exmaple config/server.yml
+    mv config/server.yml.example config/server.yml
     mv config/channel.yml.example config/channel.yml
 
 modify config/server.yml
