@@ -14,5 +14,6 @@ module RedmineIRCGateway
     test 'Call project command' do
       assert_kind_of Array, Setting.project
     end
+
   end
 end

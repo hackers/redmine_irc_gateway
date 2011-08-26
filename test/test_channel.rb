@@ -1,10 +1,10 @@
 require 'test/test_helper'
 
 module RedmineIRCGateway
-  class ChannelTest < Test::Unit::TestCase
+  class ChannelTest < ActiveSupport::TestCase
 
-    def test_channel_class
-     assert_equal "RedmineIRCGateway::Channel", Channel.to_s
+    test 'Check channel class' do
+      assert_equal "RedmineIRCGateway::Channel", Channel.to_s
     end
 
   end

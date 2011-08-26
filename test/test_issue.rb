@@ -62,6 +62,7 @@ module RedmineIRCGateway
       test 'Check project_id' do
         assert_kind_of String, Issue.assigned_me.first.project.id
       end
+
     end
   end
 end

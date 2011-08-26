@@ -2,6 +2,7 @@ require 'test/test_helper'
 
 module RedmineIRCGateway
   class ConfigTest < ActiveSupport::TestCase
+
     def setup
       yaml = YAML::Store.new("#{File.expand_path('../../config', __FILE__)}/test.yml")
       yaml.transaction do
@@ -25,5 +26,6 @@ module RedmineIRCGateway
       assert_not_equal test.key, 'config value'
       assert_equal     test.big_project, 'super project'
     end
+
   end
 end
