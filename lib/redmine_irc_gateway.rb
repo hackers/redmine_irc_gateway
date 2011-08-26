@@ -6,6 +6,8 @@ require 'rubygems'
 require 'net/irc'
 
 require 'lib/net/irc/message'
+require 'lib/active_support/core_ext/object/to_query'
+
 
 module RedmineIRCGateway
   require 'redmine_irc_gateway/version'
