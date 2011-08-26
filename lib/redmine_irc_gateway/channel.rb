@@ -22,7 +22,7 @@ module RedmineIRCGateway
 
       # Return all channel names
       def names
-        self.load('channel')
+        Config.load('channel').channels
       end
 
       # Return all channel instances
@@ -48,10 +48,6 @@ module RedmineIRCGateway
           channel = self.new(channel_name, project_id, Redmine.online_users(project_id))
         end
         channel
-      end
-
-      def load name
-         Config.load(name).channels
       end
 
     end
