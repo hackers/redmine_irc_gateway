@@ -21,7 +21,8 @@ module RedmineIRCGateway
 
       # Return all channel names
       def names
-        Config.load('channel').channels
+        channel = Config.load('channel')
+        channel.channels ||= []
       end
 
       # Return all channel instances
