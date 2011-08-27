@@ -19,7 +19,7 @@ module RedmineIRCGateway
     end
 
     test 'Load database first' do
-      assert @db.values.first < @db.values.last
+      assert @db.values.first < @db.values.last unless @db.values.first.nil?
     end
 
   end
