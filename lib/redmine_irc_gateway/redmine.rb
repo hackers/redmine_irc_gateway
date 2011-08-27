@@ -12,7 +12,7 @@ module RedmineIRCGateway
           issues << build_issue_description(i, :update)
         else
           db[i.id] = i.updated_on
-          issues << build_issue_description(i)
+          issues << build_issue_description(i) if db.values.first > i.updated_on
         end
       end
       issues
