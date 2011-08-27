@@ -21,17 +21,22 @@ module RedmineIRCGateway
 
       auto_join_to_channels
 
-      crawl_recent_issues
+      crawl_recent_issues 30 do |issue|
+        privmsg issue
+      end
     end
 
     # Receive message and response
     def on_privmsg message
       if message.channel == @console.name
         @console.talk(message).each do |mess|
-          send(:post, *[@console.operator, NOTICE, channel, mess])
+          notice([@console.operator, channel, mess])
         end
-      else
-        talk(message) { |response| send(:post, *response) }
+        return
+      end
+
+      talk message do |response|
+        notice response
       end
     end
 
@@ -65,38 +70,46 @@ module RedmineIRCGateway
       @log.error e
     end
 
-    def join(channel)
+    def join channel
       post(@prefix, JOIN, channel.name)
       post(nil, RPL_NAMREPLY,   @prefix.nick, '=', channel.name, channel.users.join(' '))
       post(nil, RPL_ENDOFNAMES, @prefix.nick, channel.name, 'End of NAMES list')
     end
 
-    def crawl_recent_issues
+    def crawl_recent_issues interval = 300
       Thread.new do
         loop do
           Redmine.all.each do |issue|
-            send(:post, *[issue.author, PRIVMSG, @main.name, "#{issue.project_name} #{issue.content}"])
+            yield [issue.author, @main.name, "#{issue.project_name} #{issue.content}"]
 
             if channel = Channel.find(issue.project_id)
-              send(:post, *[issue.author, PRIVMSG, channel.name, issue.content])
+              yield [issue.author, channel.name, issue.content]
             end
           end
-          sleep 30
+          sleep interval
         end
       end
     rescue => e
       @log.error e
     end
 
-    def talk(message)
+    def talk message
       Redmine.send(message.order).each do |issue|
-        yield [issue.author, NOTICE, message.channel, issue.content]
+        yield [issue.author, message.channel, issue.content]
       end
     rescue NoMethodError => e
       @log.error e
-      yield [@console.operator, NOTICE, message.channel, 'Command not found']
+      yield [@console.operator, message.channel, 'Command not found']
     rescue => e
       @log.error e
+    end
+
+    def privmsg message
+      send(:post, message.shift, PRIVMSG, *message)
+    end
+
+    def notice message
+      send(:post, message.shift, NOTICE, *message)
     end
 
   end
