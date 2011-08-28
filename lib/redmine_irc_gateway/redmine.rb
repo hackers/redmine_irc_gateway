@@ -11,7 +11,7 @@ module RedmineIRCGateway
     def all
       db = SDBM.open DB_PATH
       issues = []
-      most_old_updated_on = db.values.first || Issue.all.first.updated_on
+      most_old_updated_on = db.values.first || Issue.all.reverse.first.updated_on
 
       Issue.all.reverse.each do |issue|
         key = issue.id
