@@ -2,17 +2,29 @@ module RedmineIRCGateway
   module Redmine
     extend self
 
+    ##
+    # Return Redmine all issues, and save to database.
+    #
+    # db[redmine issue id] = redmine issue datetime at update
+    #
+    #
     def all
       db = SDBM.open DB_PATH
       issues = []
-      Issue.all.reverse.each do |i|
-        if db.include? i.id
-          next if db[i.id] == i.updated_on
-          db[i.id] = i.updated_on
-          issues << build_issue_description(i, :update)
+      most_old_updated_on = db.values.first || Issue.all.first.updated_on
+
+      Issue.all.reverse.each do |issue|
+        key = issue.id
+        if db.include? key
+          next if db[key] == issue.updated_on
+
+          db[key] = issue.updated_on
+          issues << build_issue_description(issue, :update)
         else
-          db[i.id] = i.updated_on
-          issues << build_issue_description(i) if db.values.first > i.updated_on
+          next if most_old_updated_on > issue.updated_on
+
+          db[key] = issue.updated_on
+          issues << build_issue_description(issue)
         end
       end
       issues
