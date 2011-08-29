@@ -4,7 +4,7 @@ require 'redmine_irc_gateway/version'
 Gem::Specification.new do |s|
   s.name        = 'redmine_irc_gateway'
   s.version     = RedmineIRCGateway::VERSION
-  s.authors     = ['Tomohiro, TAIRA', 'Naoto, SHINGAKI']
+  s.authors     = ['Tomohiro, TAIRA', 'Naoto, SHINGAKI', 'Yusaku, ONO']
   s.email       = ['tomohiro.t@gmail.com', 'n.shingaki@gmail.com']
   s.homepage    = 'http://github.com/hackers/redmine_irc_gateway'
   s.summary     = %q{Redmine IRC Gateway}
