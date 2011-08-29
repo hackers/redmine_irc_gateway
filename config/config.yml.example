@@ -1,3 +1,5 @@
+server:
+  site: http://redmine.example.com
 channels:
   ChannelName1: RedmineProjectId1
   ChannelName2: RedmineProjectId2

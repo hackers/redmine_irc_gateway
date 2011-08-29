@@ -9,11 +9,11 @@ module RedmineIRCGateway
       self.proxy = ENV['http_proxy'] if ENV['http_proxy']
 
       begin
-        config = RedmineIRCGateway::Config.load 'server'
-        self.site = config.site
+        config = RedmineIRCGateway::Config.load 'config'
+        self.site = config.server['site']
       rescue => e
         self.logger.error e.to_s
-        self.logger.error 'Check your config/server.yml settings.'
+        self.logger.error 'Check your config/config.yml settings.'
       end
 
       class << self

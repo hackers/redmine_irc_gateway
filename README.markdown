@@ -43,15 +43,12 @@ How to use
 
 Rename configuration files
 
-    mv config/server.yml.example config/server.yml
-    mv config/channel.yml.example config/channel.yml
+    mv config/config.yml.example config/config.yml
 
-Edit config/server.yml
+Edit config/config.yml
 
-    site: ${REDMINE_URI}
-
-Add channel setting to config/channel.yml
-
+    server:
+        site: ${REDMINE_URI}
     channels:
         ChannelName: project id
         AwsomeProject: 777
