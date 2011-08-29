@@ -44,20 +44,28 @@ module RedmineIRCGateway
 
     def online_users project_id
       issues = Project.find(project_id).issues
-      if issues
-        authors = issues.collect { |i| i.author.name.gsub(' ', '') }
-        members = issues.collect { |i| i.assigned_to.name.gsub(' ', '') if defined? i.assigned_to }
-        (authors + members).uniq
+      return unless issues
+
+      users = []
+      issues.each do |i|
+        users << i.author.name.gsub(' ', '')
+        if defined? i.assigned_to == nil
+          users << i.assigned_to.name.gsub(' ', '')
+        end
       end
+      users.uniq
     end
 
     def build_issue_description issue, updated = false
+      user = (defined? issue.assigned_to == nil) ? issue.assigned_to : issue.author
+
       OpenStruct.new({
-        :author       => issue.author.name.gsub(' ', ''),
+        :user         => user.name.gsub(' ', ''),
         :project_id   => issue.project.id,
         :project_name => issue.project.name,
         :content      => [
                           updated ? "4Up!" : nil,
+                          "##{issue.id}",
                           issue.tracker.name,
                           "3#{issue.status.name}",
                           "6#{issue.priority.name}",

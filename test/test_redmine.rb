@@ -31,6 +31,15 @@ module RedmineIRCGateway
         assert_raise(NoMethodError) { Redmine.unknown_method }
       end
 
+      test 'Check build description' do
+        watch_list = Issue.watched
+        watch_list.each do |w|
+          desc = Redmine.build_issue_description(w)
+          user = (defined? w.assigned_to == nil) ? w.assigned_to : w.author
+
+          assert_equal user.name.gsub(' ', ''), desc.user
+        end
+      end
     end
   end
 end

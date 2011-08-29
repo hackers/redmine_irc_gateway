@@ -80,10 +80,10 @@ module RedmineIRCGateway
       Thread.new do
         loop do
           Redmine.all.each do |issue|
-            yield [issue.author, @main.name, "#{issue.project_name} #{issue.content}"]
+            yield [issue.user, @main.name, "#{issue.project_name} #{issue.content}"]
 
             if channel = Channel.find(issue.project_id)
-              yield [issue.author, channel.name, issue.content]
+              yield [issue.user, channel.name, issue.content]
             end
           end
           sleep interval
@@ -95,7 +95,7 @@ module RedmineIRCGateway
 
     def talk message
       Redmine.send(message.order).each do |issue|
-        yield [issue.author, message.channel, issue.content]
+        yield [issue.user, message.channel, issue.content]
       end
     rescue NoMethodError => e
       @log.error e
