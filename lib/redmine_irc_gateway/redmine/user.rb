@@ -9,7 +9,11 @@ module RedmineIRCGateway
       end
 
       def name
-        "#{@attributes[:lastname]}#{@attributes[:firstname]}"
+        if @attributes[:lastname]
+          "#{@attributes[:lastname]}#{@attributes[:firstname]}"
+        else
+          super
+        end
       end
 
       def projects
@@ -19,6 +23,7 @@ module RedmineIRCGateway
         end
         projects
       end
+
     end
   end
 end
