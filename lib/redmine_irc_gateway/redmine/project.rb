@@ -13,6 +13,17 @@ module RedmineIRCGateway
         false
       end
 
+      def members
+        return unless issues
+
+        users = []
+        issues.each do |i|
+          users << i.author.name.gsub(' ', '')
+          users << i.assigned_to.name.gsub(' ', '') if i.assigned_to
+        end
+        users.uniq
+      end
+
     end
   end
 end

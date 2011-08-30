@@ -15,13 +15,6 @@ module RedmineIRCGateway
         end
       end
 
-      test 'Check project has member' do
-        user = User.current
-        my_project = user.projects.first
-
-        assert_equal true, my_project.member?(user)
-      end
-
       test 'Get user full name' do
         u = User.current
 

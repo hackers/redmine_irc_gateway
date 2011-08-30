@@ -37,24 +37,12 @@ module RedmineIRCGateway
       db.close
     end
 
-    def list
+    def me
       Issue.assigned_me.reverse.collect { |i| build_issue_description(i) }
     end
 
     def watch
       Issue.watched.reverse.collect { |i| build_issue_description(i) }
-    end
-
-    def online_users project_id
-      issues = Project.find(project_id).issues
-      return unless issues
-
-      users = []
-      issues.each do |i|
-        users << i.author.name.gsub(' ', '')
-        users << i.assigned_to.name.gsub(' ', '') if i.assigned_to
-      end
-      users.uniq
     end
 
     def build_issue_description issue, updated = false

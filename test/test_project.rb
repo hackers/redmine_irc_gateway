@@ -24,6 +24,21 @@ module RedmineIRCGateway
         end
       end
 
+      test 'Get project members' do
+        me = User.current
+        me.projects.each do |p|
+          assert_kind_of Array, p.members
+          assert p.member? me
+        end
+      end
+
+      test 'Check project has member' do
+        me = User.current
+        my_project = me.projects.first
+
+        assert my_project.member? me
+      end
+
     end
   end
 end
