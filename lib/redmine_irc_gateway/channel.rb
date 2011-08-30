@@ -5,7 +5,7 @@ module RedmineIRCGateway
 
     @@channels = {}
 
-    def initialize(name, project_id, users = [], topic = nil)
+    def initialize(name, project_id, users = [], topic = '')
       @name       = "##{name}"
       @users      = users || []
       @project_id = project_id
@@ -14,9 +14,9 @@ module RedmineIRCGateway
 
     class << self
 
-      # main channel
+      # Return main channel instance
       def main
-        self.new :Redmine, '00'
+        self.new :Redmine, 0
       end
 
       # Return all channel names
@@ -45,7 +45,8 @@ module RedmineIRCGateway
       def get channel_name, project_id
         channel = self.find project_id
         unless channel
-          channel = self.new(channel_name, project_id, Redmine.online_users(project_id))
+          project = Redmine::Project.find(project_id)
+          channel = self.new(channel_name, project_id, project.members, project.description)
         end
         channel
       end

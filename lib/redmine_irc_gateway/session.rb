@@ -74,6 +74,7 @@ module RedmineIRCGateway
       post(@prefix, JOIN, channel.name)
       post(nil, RPL_NAMREPLY,   @prefix.nick, '=', channel.name, channel.users.join(' '))
       post(nil, RPL_ENDOFNAMES, @prefix.nick, channel.name, 'End of NAMES list')
+      post(nil, TOPIC, channel.name, channel.topic) if channel.topic
     end
 
     def crawl_recent_issues interval = 300
