@@ -42,7 +42,6 @@ module RedmineIRCGateway
         end
       end
 
-      class User < Redmine::User; end
     end
   end
 end
