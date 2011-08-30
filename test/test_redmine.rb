@@ -35,11 +35,12 @@ module RedmineIRCGateway
         watch_list = Issue.watched
         watch_list.each do |w|
           desc = Redmine.build_issue_description(w)
-          user = (defined? w.assigned_to == nil) ? w.assigned_to : w.author
+          user = w.assigned_to || w.author
 
           assert_equal user.name.gsub(' ', ''), desc.user
         end
       end
+
     end
   end
 end

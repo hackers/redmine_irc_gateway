@@ -57,6 +57,10 @@ module RedmineIRCGateway
         assert_kind_of String, i.created_on
         assert_kind_of String, i.updated_on
         assert_kind_of String, i.done_ratio
+
+        assert_kind_of Array, i.journals
+
+        assert_kind_of User, i.updated_by
       end
 
       test 'Check project_id' do
