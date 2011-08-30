@@ -95,7 +95,7 @@ module RedmineIRCGateway
 
     def talk message
       Redmine.send(message.order).each do |issue|
-        yield [issue.user, message.channel, issue.content]
+        yield [issue.user, message.channel, "#{issue.project_name} #{issue.content}"]
       end
     rescue NoMethodError => e
       @log.error e
