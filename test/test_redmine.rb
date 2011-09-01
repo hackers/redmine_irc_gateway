@@ -30,7 +30,7 @@ module RedmineIRCGateway
           desc = Redmine.build_issue_description(w)
           user = w.assigned_to || w.author
 
-          assert_equal user.name.gsub(' ', ''), desc.user
+          assert_equal user.name.gsub(' ', ''), desc.speaker
         end
       end
 

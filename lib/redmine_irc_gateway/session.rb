@@ -80,11 +80,11 @@ module RedmineIRCGateway
     def crawl_recent_issues interval = 300
       Thread.new do
         loop do
-          Redmine.all.each do |issue|
-            yield [issue.user, @main.name, "#{issue.project_name} #{issue.content}"]
+          Command.exec(:all).each do |issue|
+            yield [issue.speaker, @main.name, issue.content]
 
             if channel = Channel.find(issue.project_id)
-              yield [issue.user, channel.name, issue.content]
+              yield [issue.speaker, channel.name, issue.content]
             end
           end
           sleep interval
@@ -95,8 +95,8 @@ module RedmineIRCGateway
     end
 
     def talk message
-      Redmine.send(message.order).each do |issue|
-        yield [issue.user, message.channel, "#{issue.project_name} #{issue.content}"]
+      Command.exec(message.order).each do |issue|
+        yield [issue.speaker, message.channel, issue.content]
       end
     rescue NoMethodError => e
       @log.error e

@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 
-$: << File.expand_path('../', __FILE__)
-
+$: << File.expand_path('../', __FILE__) 
 require 'sdbm'
 
 require 'rubygems'
@@ -17,6 +16,7 @@ module RedmineIRCGateway
 
   require 'redmine_irc_gateway/version'
   require 'redmine_irc_gateway/config'
+  require 'redmine_irc_gateway/command'
 
   require 'redmine_irc_gateway/redmine'
   require 'redmine_irc_gateway/redmine/api'
