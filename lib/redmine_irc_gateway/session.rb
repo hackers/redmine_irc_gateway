@@ -21,7 +21,7 @@ module RedmineIRCGateway
 
       auto_join_to_channels
 
-      crawl_recent_issues 30 do |issue|
+      crawl_recent_issues 60 do |issue|
         privmsg issue
       end
     end
