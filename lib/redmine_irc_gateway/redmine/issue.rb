@@ -5,7 +5,7 @@ module RedmineIRCGateway
       class << self
 
         def all(params = {})
-          super(({ :limit => 100, :sort => 'updated_on:desc' }).merge!(params))
+          super({ :sort => 'updated_on:desc' }.merge params)
         end
 
         def assigned_me
