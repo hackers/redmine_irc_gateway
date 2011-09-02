@@ -8,7 +8,6 @@ Overview
 ### What's this?
 
 This project provides an access to Redmine API via IRC Gateway.
-But, yet not working ;-p
 
 
 Installation
@@ -17,7 +16,7 @@ Installation
 ### Requirements
 
 - RVM
-- Ruby 1.8.7
+- Ruby 1.9.2+
 - RubyGems
     - Rake
     - Bundler
@@ -32,7 +31,7 @@ Installation
 
 2. Installing Ruby and libraries
 
-        $ rvm install 1.8.7
+        $ rvm install 1.9.2
         $ rake rig:development:setup
 
 
@@ -89,10 +88,15 @@ IRC Channel
 `#rig` at Freenode.net
 
 
-Contributors
+Author
 -------------------------------------------------------------------------------
 
 - Tomohiro, TAIRA [@Tomohiro](http://twitter.com/Tomohiro)
+
+
+Contributors
+-------------------------------------------------------------------------------
+
 - Naoto, SHINGAKI [@naotos](http://twitter.com/naotos)
 - Yusaku, ONO [@yono](http://twitter.com/yono)
 
