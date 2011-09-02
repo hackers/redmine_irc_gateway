@@ -3,9 +3,9 @@ module RedmineIRCGateway
     extend self
 
     attr_reader :names
+    @commands = {}
 
     def register &block
-      @commands = {}
       self.instance_eval &block if block_given?
     end
 
