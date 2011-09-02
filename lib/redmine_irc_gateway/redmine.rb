@@ -1,5 +1,6 @@
 module RedmineIRCGateway
   module Redmine
+    extend self
 
     require 'redmine_irc_gateway/redmine/api'
     require 'redmine_irc_gateway/redmine/project'
@@ -7,8 +8,6 @@ module RedmineIRCGateway
     require 'redmine_irc_gateway/redmine/user'
     require 'redmine_irc_gateway/redmine/time_entry'
     require 'redmine_irc_gateway/redmine/version'
-
-    extend self
 
     def build_issue_description issue, updated = false
       speaker = (updated ? issue.updated_by : (issue.assigned_to || issue.author)).name.gsub(' ', '')
