@@ -6,7 +6,7 @@ module RedmineIRCGateway
     @commands = {}
 
     def register &block
-      self.instance_eval &block if block_given?
+      module_eval &block if block_given?
     end
 
     def command(instruction, &block)
