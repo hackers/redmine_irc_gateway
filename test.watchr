@@ -1,13 +1,23 @@
 # vim: ft=ruby
+# Run me with:
+#   $ watchr tests.watchr
 
-def run_tests
-  system 'rake rig:test:all'
+# --------------------------------------------------
+# Rules
+# --------------------------------------------------
+watch( 'test/test_.*\.rb'      ) { |md| ruby md[0] }
+watch( 'lib/(.*)\.rb'          ) { |md| ruby "test/test_#{File.basename(md[1])}.rb" }
+watch( '^test/test_helper\.rb' ) { run 'rake rig:test:all' }
+
+
+# --------------------------------------------------
+# Helpers
+# --------------------------------------------------
+def ruby(*paths)
+  run "ruby #{paths.flatten.join(' ')}"
 end
 
-watch 'test/test_.*\.rb' do |md|
-  system "ruby #{md[0]}"
-end
-
-watch('lib/(.*)\.rb') do |md|
-  system "ruby test/test_#{File.basename(md[1])}.rb"
+def run cmd
+  puts cmd
+  system cmd
 end
