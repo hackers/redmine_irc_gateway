@@ -67,7 +67,6 @@ module RedmineIRCGateway
       end
 
       command :watch do
-        puts 'a'
         Issue.watched.reverse.collect { |i| build_issue_description(i) }
       end
 
