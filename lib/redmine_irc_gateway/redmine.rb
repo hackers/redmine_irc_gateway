@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module RedmineIRCGateway
   module Redmine
     extend self

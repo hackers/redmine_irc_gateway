@@ -1,14 +1,11 @@
 #!/usr/bin/env ruby
 
-$: << File.expand_path('../', __FILE__) 
+$: << File.expand_path('../', __FILE__)
+
 require 'sdbm'
 
 require 'rubygems'
 require 'net/irc'
-
-require 'lib/net/irc/message'
-require 'lib/activesupport/core_ext/object/to_query'
-
 
 module RedmineIRCGateway
 

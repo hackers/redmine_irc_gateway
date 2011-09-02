@@ -4,9 +4,10 @@ module RedmineIRCGateway
   module Redmine
     class API < ActiveResource::Base
 
-      self.logger = Logger.new STDOUT
+      self.logger       = Logger.new STDOUT
       self.logger.level = Logger::ERROR
-      self.proxy = ENV['http_proxy'] if ENV['http_proxy']
+      self.proxy        = ENV['http_proxy'] if ENV['http_proxy']
+      self.format       = :xml
 
       begin
         config = RedmineIRCGateway::Config.load 'config'
@@ -19,6 +20,11 @@ module RedmineIRCGateway
       class << self
 
         attr_accessor :key
+
+        # see [REST issues response with issue count limit and offset](http://www.redmine.org/issues/6140)
+        def inherited(child)
+          child.headers['X-Redmine-Nometa'] = '1'
+        end
 
         def find(*args)
           scope   = args.slice!(0)
@@ -42,6 +48,7 @@ module RedmineIRCGateway
         end
 
       end
+
     end
   end
 end

@@ -1,14 +1,13 @@
 module RedmineIRCGateway
-  class Message < Net::IRC::Message
+  class Message
 
     attr_accessor :channel, :content
 
-    def initialize(*args)
-      super
-      @channel, @content = @params
+    def initialize params
+      @channel, @content = params
     end
 
-    def order
+    def instruction
       @content.downcase.to_sym
     end
 

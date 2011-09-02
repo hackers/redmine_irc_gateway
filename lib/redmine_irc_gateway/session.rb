@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module RedmineIRCGateway
   class Session < Net::IRC::Server::Session
 
@@ -27,7 +29,9 @@ module RedmineIRCGateway
     end
 
     # Receive message and response
-    def on_privmsg message
+    def on_privmsg m
+      message = Message.new m.params
+
       if message.channel == @console.name
         @console.talk(message).each do |mess|
           notice([@console.operator, channel, mess])
@@ -95,7 +99,7 @@ module RedmineIRCGateway
     end
 
     def talk message
-      Command.exec(message.order).each do |issue|
+      Command.exec(message.instruction).each do |issue|
         yield [issue.speaker, message.channel, issue.content]
       end
     rescue NoMethodError => e
