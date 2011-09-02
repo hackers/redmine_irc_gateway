@@ -27,6 +27,13 @@ module RedmineIRCGateway
         end
       end
 
+      test 'Get issue reported' do
+        id = User.current.id
+        Issue.reported.each do |i|
+          assert_equal id, i.author.id
+        end
+      end
+
       test 'Check issue attributes' do
         i = Issue.assigned_me.first
 
@@ -60,7 +67,7 @@ module RedmineIRCGateway
 
         assert_kind_of Array, i.journals
 
-        assert_kind_of User, i.updated_by
+        assert_kind_of String, i.updated_by.name
 
         assert_not_nil i.updated?
       end

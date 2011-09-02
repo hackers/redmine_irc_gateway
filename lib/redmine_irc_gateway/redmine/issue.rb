@@ -9,11 +9,15 @@ module RedmineIRCGateway
         end
 
         def assigned_me
-          all({ :assigned_to_id => :me, :sort => 'updated_on:desc' })
+          all({ :assigned_to_id => :me })
         end
 
         def watched
-          all({ :watcher_id => :me, :sort => 'updated_on:desc' })
+          all({ :watcher_id => :me })
+        end
+
+        def reported
+          all({ :author_id => :me })
         end
 
       end
