@@ -61,6 +61,8 @@ module RedmineIRCGateway
         assert_kind_of Array, i.journals
 
         assert_kind_of User, i.updated_by
+
+        assert_not_nil i.updated?
       end
 
       test 'Check project_id' do

@@ -19,7 +19,7 @@ module RedmineIRCGateway
       end
 
       def uri
-        "#{Issue.site}issues/#{@attributes[:id]}"
+        "#{Issue.site}issues/#{self.id}"
       end
 
       # Return assigned_to user object
@@ -29,7 +29,7 @@ module RedmineIRCGateway
 
       # Return issue journals
       def journals
-        Issue.find(@attributes[:id], { :params => { :include => :journals } }).attributes[:journals]
+        Issue.find(self.id, { :params => { :include => :journals } }).attributes[:journals]
       end
 
       # Return latest update user object, but return author user object if not exist update user
@@ -40,6 +40,11 @@ module RedmineIRCGateway
         else
           updates.first.user
         end
+      end
+
+      # Return updated
+      def updated?
+        self.updated_on > self.created_on
       end
 
     end
