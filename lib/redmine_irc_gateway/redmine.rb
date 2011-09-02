@@ -5,20 +5,23 @@ module RedmineIRCGateway
 
     def build_issue_description issue, updated = false
       speaker = (updated ? issue.updated_by : (issue.assigned_to || issue.author)).name.gsub(' ', '')
+      reply_to = if issue.assigned_to and speaker != issue.assigned_to.name.gsub!(' ', '')
+                   ' @' + issue.assigned_to.name
+                 else
+                   nil
+                 end
 
-      prefix = ["4#{updated ? '»': '›'}", issue.assigned_to ? ' @' + issue.assigned_to.name.gsub(' ', '') : nil].join
-      suffix = "14#{issue.uri}"
+      prefix = ["4#{updated ? '»': '›'}", reply_to].join
 
       OpenStruct.new({
         :speaker     => speaker,
         :project_id  => issue.project.id,
-        :prefix      => prefix,
         :content     => [
                           prefix,
                           "[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}]",
                           "(#{issue.status.name} #{issue.done_ratio}% : #{issue.priority.name})",
                           issue.subject,
-                          suffix
+                          "14#{issue.uri}"
                          ].join(' ')
       })
     end
@@ -42,16 +45,12 @@ module RedmineIRCGateway
               next if db[key] == issue.updated_on
 
               db[key] = issue.updated_on
-              issues << Redmine.build_issue_description(issue, :update)
+              issues << build_issue_description(issue, issue.updated?)
             else
               next if most_old_updated_on > issue.updated_on
 
               db[key] = issue.updated_on
-              if issue.created_on == issue.updated_on
-                issues << build_issue_description(issue)
-              else
-                issues << build_issue_description(issue, :update)
-              end
+              issues << build_issue_description(issue, issue.updated?)
             end
           end
           issues
