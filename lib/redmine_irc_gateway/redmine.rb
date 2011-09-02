@@ -1,6 +1,13 @@
 module RedmineIRCGateway
   module Redmine
-    include Command
+
+    require 'redmine_irc_gateway/redmine/api'
+    require 'redmine_irc_gateway/redmine/project'
+    require 'redmine_irc_gateway/redmine/issue'
+    require 'redmine_irc_gateway/redmine/user'
+    require 'redmine_irc_gateway/redmine/time_entry'
+    require 'redmine_irc_gateway/redmine/version'
+
     extend self
 
     def build_issue_description issue, updated = false
@@ -24,51 +31,6 @@ module RedmineIRCGateway
                           "14#{issue.uri}"
                          ].join(' ')
       })
-    end
-
-    register do
-
-      ##
-      # Return Redmine all issues, and save to database.
-      #
-      # db[redmine issue id] = redmine issue datetime at update
-      #
-      command :all do
-        begin
-          db = SDBM.open DB_PATH
-          issues = []
-          most_old_updated_on = db.values.first || Issue.all.reverse.first.updated_on
-
-          Issue.all.reverse.each do |issue|
-            key = issue.id
-            if db.include? key
-              next if db[key] == issue.updated_on
-
-              db[key] = issue.updated_on
-              issues << build_issue_description(issue, issue.updated?)
-            else
-              next if most_old_updated_on > issue.updated_on
-
-              db[key] = issue.updated_on
-              issues << build_issue_description(issue, issue.updated?)
-            end
-          end
-          issues
-        rescue => e
-          puts e
-        ensure
-          db.close
-        end
-      end
-
-      command :me do
-        Issue.assigned_me.reverse.collect { |i| build_issue_description(i) }
-      end
-
-      command :watch do
-        Issue.watched.reverse.collect { |i| build_issue_description(i) }
-      end
-
     end
 
   end
