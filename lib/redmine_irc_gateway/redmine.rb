@@ -8,8 +8,6 @@ module RedmineIRCGateway
     require 'redmine_irc_gateway/redmine/project'
     require 'redmine_irc_gateway/redmine/issue'
     require 'redmine_irc_gateway/redmine/user'
-    require 'redmine_irc_gateway/redmine/time_entry'
-    require 'redmine_irc_gateway/redmine/version'
 
     def build_issue_description issue, updated = false
       speaker = (updated ? issue.updated_by : (issue.assigned_to || issue.author)).name.gsub(' ', '')
