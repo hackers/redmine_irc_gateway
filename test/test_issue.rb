@@ -76,6 +76,17 @@ module RedmineIRCGateway
         assert_kind_of String, Issue.assigned_me.first.project.id
       end
 
+      test 'Update issue assigned to me' do
+        i = Issue.watched.first
+        assert i.assigned_to_me
+      end
+
+      test 'Update issue unassigned' do
+        i = Issue.watched.first
+        result = (i.assigned_to = nil)
+        assert_nil result
+      end
+
     end
   end
 end

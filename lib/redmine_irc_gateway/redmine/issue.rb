@@ -31,6 +31,19 @@ module RedmineIRCGateway
         @attributes[:assigned_to]
       end
 
+      # Update assigned to user object
+      def assigned_to= user
+        id = user ? user.id : nil
+        self.assigned_to_id = id
+        save
+      end
+
+      # Update assigned to me
+      def assigned_to_me
+        self.assigned_to_id = User.current.id
+        save
+      end
+
       # Return issue journals
       def journals
         Issue.find(self.id, { :params => { :include => :journals } }).attributes[:journals]
