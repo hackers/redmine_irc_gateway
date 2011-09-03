@@ -4,6 +4,8 @@ script: 'rake rig:test:all'
 
 rvm:
   - 1.9.2
+  - 1.9.2-head
+  - 1.9.3
 
 notifications:
   irc: "irc.freenode.org#rig"
