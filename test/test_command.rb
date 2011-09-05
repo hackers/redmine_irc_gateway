@@ -5,7 +5,7 @@ module RedmineIRCGateway
     class CommandTest < ActiveSupport::TestCase
 
       test 'Check method missing' do
-        assert_equal Command.exec(:me), Command.me
+        assert_kind_of Array, Command.me
       end
 
       test 'Register command' do
@@ -31,7 +31,7 @@ module RedmineIRCGateway
       end
 
       test 'Help' do
-        assert_kind_of String, Command.help
+        assert_kind_of Array, Command.help
       end
 
    end

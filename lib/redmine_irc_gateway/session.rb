@@ -28,17 +28,17 @@ module RedmineIRCGateway
 
     # Receive message and response
     def on_privmsg m
-      message = Message.new m.params
+      message = Message.new({ :channel => m.params[0], :content => m.params[1] })
 
-      if message.channel == @console.name
+      case message.channel
+      when @console.name
         @console.talk(message).each do |response|
-          notice([@console.operator, message.channel, response])
+          notice [@console.operator, message.channel, response]
         end
-        return
-      end
-
-      talk message do |response|
-        notice response
+      else
+        talk message do |response|
+          notice response
+        end
       end
     end
 
@@ -97,8 +97,8 @@ module RedmineIRCGateway
     end
 
     def talk message
-      Command.exec(message.instruction).each do |issue|
-        yield [issue.speaker, message.channel, issue.content]
+      Command.send(message.instruction).each do |issue|
+        yield [issue.speaker || @prefix.nick, message.channel, issue.content]
       end
     end
 

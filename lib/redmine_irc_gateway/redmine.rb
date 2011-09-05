@@ -19,7 +19,7 @@ module RedmineIRCGateway
 
       prefix = ["4#{updated ? '»': '›'}", reply_to].join
 
-      OpenStruct.new({
+      Message.new({
         :speaker     => speaker,
         :project_id  => issue.project.id,
         :content     => [

@@ -24,12 +24,11 @@ module RedmineIRCGateway
       end
       @commands[instruction.to_sym].call
     rescue => e
-      puts e
-      [OpenStruct.new({ :speaker => nil, :content => e.to_s })]
+      [Message.new({ :content => e.to_s })]
     end
 
     def help
-      @commands.keys.join ' '
+      @commands.keys.collect { |c| Message.new({ :content => c.to_s }) }
     end
 
     def method_missing name
