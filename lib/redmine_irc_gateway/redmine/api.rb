@@ -5,9 +5,11 @@ module RedmineIRCGateway
 
     class Connection < ActiveResource::Connection
 
+      attr_accessor :key # Redmine API key
+
       # override request method. add Redmine API Key
       def request(method, path, *arguments)
-        super(method, "#{path}#{(path =~ /\?/ ? '&' : '?')}key=#{API.key}", *arguments)
+        super(method, "#{path}#{(path =~ /\?/ ? '&' : '?')}key=#{key}", *arguments)
       end
 
     end
@@ -36,9 +38,25 @@ module RedmineIRCGateway
           child.headers['X-Redmine-Nometa'] = '1'
         end
 
+        # override connection method at /gems/activeresource-3.1.0/lib/active_resource/base.rb
+        #
+        # An instance of ActiveResource::Connection that is the base \connection to the remote service.
+        # The +refresh+ parameter toggles whether or not the \connection is refreshed at every request
+        # or not (defaults to <tt>false</tt>).
         def connection(refresh = false)
-          @connection = Connection.new(site, format) if refresh || @connection.nil?
-          @connection
+          if defined?(@connection) || superclass == ActiveResource::Base
+            @connection = Connection.new(site, format) if refresh || @connection.nil?
+            @connection.proxy = proxy if proxy
+            @connection.user = user if user
+            @connection.password = password if password
+            @connection.auth_type = auth_type if auth_type
+            @connection.timeout = timeout if timeout
+            @connection.ssl_options = ssl_options if ssl_options
+            @connection.key = key if key
+            @connection
+          else
+            superclass.connection
+          end
         end
 
         def all(params = nil)
