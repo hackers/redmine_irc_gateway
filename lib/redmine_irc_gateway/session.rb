@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module RedmineIRCGateway
   class Session < Net::IRC::Server::Session
 
@@ -33,8 +31,8 @@ module RedmineIRCGateway
       message = Message.new m.params
 
       if message.channel == @console.name
-        @console.talk(message).each do |mess|
-          notice([@console.operator, channel, mess])
+        @console.talk(message).each do |response|
+          notice([@console.operator, message.channel, response])
         end
         return
       end
@@ -84,7 +82,7 @@ module RedmineIRCGateway
     def crawl_recent_issues interval = 300
       Thread.new do
         loop do
-          Command.exec(:all).each do |issue|
+          Command.all.each do |issue|
             yield [issue.speaker, @main.name, issue.content]
 
             if channel = Channel.find(issue.project_id)
@@ -102,11 +100,6 @@ module RedmineIRCGateway
       Command.exec(message.instruction).each do |issue|
         yield [issue.speaker, message.channel, issue.content]
       end
-    rescue NoMethodError => e
-      @log.error e
-      yield [@console.operator, message.channel, 'Command not found']
-    rescue => e
-      @log.error e
     end
 
     def privmsg message

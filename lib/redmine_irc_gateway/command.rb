@@ -1,8 +1,9 @@
+# encoding: utf-8
+
 module RedmineIRCGateway
   module Command
     extend self
 
-    attr_reader :names
     @commands = {}
 
     def register &block
@@ -12,18 +13,23 @@ module RedmineIRCGateway
     def command(instruction, &block)
       if block_given?
         @commands[instruction.to_sym] = block
-        @names = @commands.keys
       else
-        raise SyntaxError 'No block given'
+        raise SyntaxError, 'No block given'
       end
     end
 
     def exec instruction
+      unless @commands[instruction.to_sym]
+        raise NoMethodError, 'Command not found'
+      end
       @commands[instruction.to_sym].call
+    rescue => e
+      puts e
+      [OpenStruct.new({ :speaker => nil, :content => e.to_s })]
     end
 
     def help
-      @names.join ' '
+      @commands.keys.join ' '
     end
 
     def method_missing name
