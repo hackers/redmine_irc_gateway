@@ -7,9 +7,9 @@ module RedmineIRCGateway
 
       attr_accessor :key # Redmine API key
 
-      # override request method. add Redmine API Key
-      def request(method, path, *arguments)
-        super(method, "#{path}#{(path =~ /\?/ ? '&' : '?')}key=#{key}", *arguments)
+      # override authorization_header method. add Redmine API key to header
+      def authorization_header(http_method, uri)
+        { 'X-Redmine-API-Key' => key }
       end
 
     end
