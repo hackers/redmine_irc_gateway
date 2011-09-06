@@ -1,4 +1,3 @@
-require 'bundler/gem_tasks'
 require 'rake/clean'
 
 CLEAN.include('config/test.yml', 'tmp', 'log', '/tmp/rig_issues.*')
@@ -8,10 +7,8 @@ namespace :rig do
     desc 'Setup development environments'
     task  :setup do
       sh 'rvm use 1.9.2'
-      sh 'rvm current'
       sh 'rvm gemset create rig'
       sh 'rvm gemset use rig'
-      sh 'rvm current'
       sh 'gem install bundler'
       sh 'gem list'
       sh 'bundle'
@@ -26,3 +23,9 @@ namespace :rig do
 end
 
 task :default => 'rig:test:all'
+
+begin
+  require 'bundler/gem_tasks'
+rescue LoadError
+  abort 'NOTE: Run `$ rake rig:development:setup`'
+end
