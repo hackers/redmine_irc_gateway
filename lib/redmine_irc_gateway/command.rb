@@ -22,7 +22,9 @@ module RedmineIRCGateway
       unless @commands[instruction.to_sym]
         raise NoMethodError, 'Command not found'
       end
-      @commands[instruction.to_sym].call
+      cmd = @commands[instruction.to_sym].call
+      raise NoMethodError, 'Not found' if cmd.empty?
+      cmd
     rescue => e
       [Message.new({ :content => e.to_s })]
     end
