@@ -43,11 +43,11 @@ module RedmineIRCGateway
     extend Redmine
 
     ##
-    # Return Redmine all issues, and save to database.
+    # Return Redmine recent issues, and save to database.
     #
     # db[redmine issue id] = redmine issue datetime at update
     #
-    command :all do
+    command :recent do
       begin
         db = SDBM.open DB_PATH
         issues = []

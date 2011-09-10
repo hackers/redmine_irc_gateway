@@ -82,7 +82,7 @@ module RedmineIRCGateway
     def crawl_recent_issues interval = 300
       Thread.new do
         loop do
-          Command.all.each do |issue|
+          Command.recent.each do |issue|
             yield [issue.speaker, @main.name, issue.content]
 
             if channel = Channel.find(issue.project_id)
