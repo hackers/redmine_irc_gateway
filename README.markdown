@@ -44,13 +44,14 @@ Rename configuration files
 
     mv config/config.yml.example config/config.yml
 
-Edit config/config.yml
+Edit config/config.yml or $HOME/.rig/config.yml
 
     server:
         site: ${REDMINE_URI}
     channels:
         ChannelName: project id
         AwsomeProject: 777
+
 
 
 ### Run, and stay on top
