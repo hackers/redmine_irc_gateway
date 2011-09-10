@@ -97,7 +97,10 @@ module RedmineIRCGateway
     end
 
     def talk message
-      Command.send(message.instruction).each do |issue|
+      cmd = Command.send(message.instruction)
+      yield [@prefix.nick, message.channel, "Not Found"] if cmd.empty?
+      
+      cmd.each do |issue|
         yield [issue.speaker || @prefix.nick, message.channel, issue.content]
       end
     end
