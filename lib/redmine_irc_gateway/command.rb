@@ -2,6 +2,9 @@
 
 module RedmineIRCGateway
   module Command
+
+    class NotFoundError < StandardError; end
+
     extend self
 
     @commands = {}
@@ -20,11 +23,16 @@ module RedmineIRCGateway
 
     def exec instruction
       unless @commands[instruction.to_sym]
-        raise NoMethodError, 'Command not found'
+        raise NotImplementedError, 'Command not found'
       end
-      cmd = @commands[instruction.to_sym].call
-      raise NoMethodError, 'Not found' if cmd.empty?
-      cmd
+
+      result = @commands[instruction.to_sym].call
+
+      if result.empty?
+        raise NotFoundError, 'Not found'
+      end
+
+      result
     rescue => e
       [Message.new({ :content => e.to_s })]
     end
@@ -33,8 +41,10 @@ module RedmineIRCGateway
       @commands.keys.collect { |c| Message.new({ :content => c.to_s }) }
     end
 
-    def method_missing name
-      exec name
+    def method_missing instruction
+      @commands[instruction.to_sym].call
+    rescue => e
+      [Message.new({ :content => e.to_s })]
     end
 
   end
@@ -42,11 +52,10 @@ module RedmineIRCGateway
   Command.register do
     extend Redmine
 
-    ##
+    #
     # Return Redmine recent issues, and save to database.
     #
     # db[redmine issue id] = redmine issue datetime at update
-    #
     command :recent do
       begin
         db = SDBM.open DB_PATH

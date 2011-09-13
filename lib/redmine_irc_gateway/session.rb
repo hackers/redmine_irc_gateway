@@ -97,7 +97,7 @@ module RedmineIRCGateway
     end
 
     def talk message
-      Command.send(message.instruction).each do |issue|
+      Command.exec(message.instruction).each do |issue|
         yield [issue.speaker || @prefix.nick, message.channel, issue.content]
       end
     end
