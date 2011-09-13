@@ -19,11 +19,15 @@ module RedmineIRCGateway
 
       super
 
+      @user = User.new({ :nick => @nick, :key => @pass })
+      @user.connection_establishment
+
       auto_join_to_channels
 
       crawl_recent_issues 60 do |issue|
         privmsg issue
       end
+
     end
 
     # Receive message and response
@@ -40,12 +44,6 @@ module RedmineIRCGateway
           notice response
         end
       end
-    end
-
-    # Set password to Redmine API
-    def on_pass message
-      super
-      Redmine::API.key = @pass
     end
 
     # Disallow join to a channel
@@ -67,7 +65,7 @@ module RedmineIRCGateway
       @console = Console.new
       @main    = Channel.main
 
-      ([@console, @main] + Channel.all).each { |channel| join channel }
+      ([@console, @main] + @user.channels.values).each { |channel| join channel }
     rescue => e
       @log.error e
     end
@@ -85,7 +83,7 @@ module RedmineIRCGateway
           Command.recent.each do |issue|
             yield [issue.speaker, @main.name, issue.content]
 
-            if channel = Channel.find(issue.project_id)
+            if channel = @user.channels.find(issue.project_id)
               yield [issue.speaker, channel.name, issue.content]
             end
           end

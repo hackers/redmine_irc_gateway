@@ -16,7 +16,7 @@ module RedmineIRCGateway
     end
 
     def channels
-      @channels = Channel.all unless @channels
+      @channels ||= Channel.all
     end
 
     # @TODO Create user connection

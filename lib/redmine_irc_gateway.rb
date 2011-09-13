@@ -18,6 +18,7 @@ module RedmineIRCGateway
   require 'redmine_irc_gateway/command'
 
   require 'redmine_irc_gateway/message'
+  require 'redmine_irc_gateway/user'
   require 'redmine_irc_gateway/session'
   require 'redmine_irc_gateway/channel'
   require 'redmine_irc_gateway/console'
