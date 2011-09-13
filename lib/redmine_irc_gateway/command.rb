@@ -33,7 +33,7 @@ module RedmineIRCGateway
       end
 
       result
-    rescue => e
+    rescue Exception => e
       [Message.new({ :content => e.to_s })]
     end
 
