@@ -14,8 +14,8 @@ module RedmineIRCGateway
 
     # Return all channel names
     def names
-      channel = Config.load
-      channel.channels ||= []
+      config = Config.load.get(User.session.profile)
+      config['channels'] ||= []
     end
 
     # Return all channel instances
@@ -56,7 +56,6 @@ module RedmineIRCGateway
         self.new({ :name => :Redmine, :project_id => 0 })
       end
 
-      # @TODO get user nick argument
       def all
         self.new.list
       end

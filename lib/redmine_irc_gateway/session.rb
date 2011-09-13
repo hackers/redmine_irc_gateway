@@ -19,8 +19,7 @@ module RedmineIRCGateway
 
       super
 
-      @user = User.new({ :nick => @nick, :key => @pass })
-      @user.connection_establishment
+      @user = User.start_session({ :nick => @nick, :key => @pass, :profile => @user })
 
       auto_join_to_channels
 

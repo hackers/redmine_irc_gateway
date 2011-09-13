@@ -1,39 +1,25 @@
 module RedmineIRCGateway
   class User
 
-    # user stack
-    @@users = {}
+    cattr_reader :session
+    attr_reader  :nick, :key, :profile, :channels
 
-    attr_reader :nick, :key, :channels, :connection
+    def initialize(params)
+      @nick    = params[:nick]
+      @key     = params[:key]
+      @profile = params[:profile]
 
-    def initialize(params = nil)
-      if params
-        @nick = params[:nick]
-        @key  = params[:key]
-      end
-
-      @@users[@nick.to_sym] = self
+      @@session = self
     end
 
     def channels
       @channels ||= Channel.all
     end
 
-    # @TODO Create user connection
-    def connection_establishment
-      Redmine::API.key = @key
-    end
-
-    # @TODO Return connection object to the Redmine
-    def connection
-      connection = [] #dummy
-    end
-
     class << self
 
-      # Find user at stack
-      def find(name)
-        @@users[name.to_sym]
+      def start_session(params)
+        self.new(params)
       end
 
     end

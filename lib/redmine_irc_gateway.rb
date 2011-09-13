@@ -25,6 +25,7 @@ module RedmineIRCGateway
   require 'redmine_irc_gateway/setting'
   require 'redmine_irc_gateway/server'
 
+
 end
 
 if __FILE__ == $0
