@@ -50,8 +50,7 @@ module RedmineIRCGateway
             connection
           else
             begin
-              config = RedmineIRCGateway::Config.load.get profile
-              site = config['site']
+              site = RedmineIRCGateway::Config.load.get(profile)['site'] || self.site
             rescue => e
               logger.info 'Use default site'
               site = self.site
