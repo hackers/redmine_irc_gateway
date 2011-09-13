@@ -1,54 +1,64 @@
 module RedmineIRCGateway
-  class Channel
+  class Channel < Hash
 
-    attr_reader :name, :users, :project_id, :topic
+    attr_reader :name, :users, :project_id, :topic, :channels
 
-    @@channels = {}
+    def initialize(params = nil)
+      if params
+        @name       = "##{params[:name]}"
+        @users      = params[:users] || []
+        @project_id = params[:project_id]
+        @topic      = params[:topic] || ''
+      end
+    end
 
-    def initialize(name, project_id, users = [], topic = '')
-      @name       = "##{name}"
-      @users      = users || []
-      @project_id = project_id
-      @topic      = topic
+    # Return all channel names
+    def names
+      channel = Config.load
+      channel.channels ||= []
+    end
+
+    # Return all channel instances
+    def list
+      names.each { |name, id| add(get(name, id.to_s)) }
+      self
+    end
+
+    # Add channel instance to stack
+    def add channel
+      self[channel.project_id] = channel
+    end
+
+    # Find channel instance at stack
+    def find project_id
+      self[project_id]
+    end
+
+    # Return find or create channel instance
+    def get channel_name, project_id
+      channel = find project_id
+      unless channel
+        project = Redmine::Project.find(project_id)
+        channel = Channel.new({
+          :name       => channel_name,
+          :project_id => project_id,
+          :users      => project.members,
+          :topic      => project.description
+        })
+      end
+      channel
     end
 
     class << self
 
       # Return main channel instance
       def main
-        self.new :Redmine, 0
+        self.new({ :name => :Redmine, :project_id => 0 })
       end
 
-      # Return all channel names
-      def names
-        channel = Config.load
-        channel.channels ||= []
-      end
-
-      # Return all channel instances
+      # @TODO get user nick argument
       def all
-        self.names.each { |name, id| self.add(self.get(name, id.to_s)) }
-        @@channels.values
-      end
-
-      # Add channel instance to stack
-      def add channel
-        @@channels[channel.project_id] = channel
-      end
-
-      # Find channel instance at stack
-      def find project_id
-        @@channels[project_id]
-      end
-
-      # Return find or create channel instance
-      def get channel_name, project_id
-        channel = self.find project_id
-        unless channel
-          project = Redmine::Project.find(project_id)
-          channel = self.new(channel_name, project_id, project.members, project.description)
-        end
-        channel
+        self.new.list
       end
 
     end
