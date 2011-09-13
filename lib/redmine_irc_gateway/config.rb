@@ -6,10 +6,6 @@ module RedmineIRCGateway
 
     attr_reader :path
 
-    def get(*args)
-      send(*args)
-    end
-
     class << self
       def load(name = 'config')
         self.new name
@@ -42,6 +38,10 @@ module RedmineIRCGateway
           yaml[k] = v
         end
       end
+    end
+
+    def get(*args)
+      send(*args)
     end
 
   end

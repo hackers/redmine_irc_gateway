@@ -4,6 +4,12 @@ module RedmineIRCGateway
     cattr_reader :session
     attr_reader  :nick, :key, :profile, :channels
 
+    class << self
+      def start_session params
+        self.new params
+      end
+    end
+
     def initialize(params)
       @nick    = params[:nick]
       @key     = params[:key]
@@ -14,14 +20,6 @@ module RedmineIRCGateway
 
     def channels
       @channels ||= Channel.all
-    end
-
-    class << self
-
-      def start_session(params)
-        self.new(params)
-      end
-
     end
 
   end

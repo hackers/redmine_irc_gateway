@@ -5,6 +5,12 @@ module RedmineIRCGateway
   class Server
     attr_accessor :opts
 
+    class << self
+      def run!
+        self.new.start
+      end
+    end
+
     def initialize
       @opts = Slop.parse :help => true do
         banner "Usage: #{$0} [options]"
@@ -26,13 +32,9 @@ module RedmineIRCGateway
       @opts[:logger].level = @opts[:debug] ? Logger::DEBUG : Logger::INFO
     end
 
-    def self.run!
-      self.new.run!
-    end
-
     def start
       Net::IRC::Server.new(@opts[:host], @opts[:port], RedmineIRCGateway::Session, @opts).start
     end
-    alias :run! :start
+
   end
 end

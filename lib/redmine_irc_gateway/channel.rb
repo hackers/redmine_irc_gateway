@@ -3,6 +3,18 @@ module RedmineIRCGateway
 
     attr_reader :name, :users, :project_id, :topic, :channels
 
+    class << self
+      # Return main channel instance
+      def main
+        self.new({ :name => :Redmine, :project_id => 0 })
+      end
+
+      # Return my all channel instances
+      def all
+        self.new.list
+      end
+    end
+
     def initialize(params = nil)
       if params
         @name       = "##{params[:name]}"
@@ -49,17 +61,5 @@ module RedmineIRCGateway
       channel
     end
 
-    class << self
-
-      # Return main channel instance
-      def main
-        self.new({ :name => :Redmine, :project_id => 0 })
-      end
-
-      def all
-        self.new.list
-      end
-
-    end
   end
 end
