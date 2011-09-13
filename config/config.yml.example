@@ -1,6 +1,12 @@
-server:
+Your login name or user name:
   site: http://redmine.example.com
-channels:
-  ChannelName1: RedmineProjectId1
-  ChannelName2: RedmineProjectId2
-  ChannelName3: RedmineProjectId3
+  channels:
+    ChannelName1: RedmineProjectId1
+    ChannelName2: RedmineProjectId2
+    ChannelName3: RedmineProjectId3
+
+redmine_example:
+  site: http://redmine.example.com
+  channels:
+    ChannelName1: RedmineProjectId1
+    ChannelName2: RedmineProjectId2
