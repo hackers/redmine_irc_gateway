@@ -23,10 +23,10 @@ module RedmineIRCGateway
 
       begin
         config = RedmineIRCGateway::Config.load
-        self.site = config.server['site']
+        self.site = config.default['site']
       rescue => e
         self.logger.error e.to_s
-        self.logger.error 'Check your config/config.yml settings.'
+        self.logger.error 'Check your $HOME/.rig/config.yml or config/config.yml settings.'
       end
 
       class << self
@@ -46,14 +46,14 @@ module RedmineIRCGateway
         # The +refresh+ parameter toggles whether or not the \connection is refreshed at every request
         # or not (defaults to <tt>false</tt>).
         def connection(refresh = false)
-          if @@connections[profile]
-            @@connections[profile]
+          if connection = @@connections[profile]
+            connection
           else
             begin
-              config = RedmineIRCGateway::Config.load.get(profile)
+              config = RedmineIRCGateway::Config.load.get profile
               site = config['site']
             rescue => e
-              self.logger.error e.to_s
+              logger.info 'Use default site'
               site = self.site
             end
 
@@ -69,9 +69,7 @@ module RedmineIRCGateway
         end
 
         def site
-          @@connections[profile].site + '/'
-        rescue
-          super
+          @@connections[profile].site + '/' rescue super
         end
 
         def all(params = nil)

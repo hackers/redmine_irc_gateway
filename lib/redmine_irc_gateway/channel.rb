@@ -27,7 +27,7 @@ module RedmineIRCGateway
     # Return all channel names
     def names
       config = Config.load.get(User.session.profile)
-      config['channels'] ||= []
+      config['channels'] rescue []
     end
 
     # Return all channel instances

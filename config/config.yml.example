@@ -1,12 +1,10 @@
-Your login name or user name:
+default:
   site: http://redmine.example.com
+ 
+# profile name - IRC user name or IRC login name
+profile_name:
+  site: http://redmine.example.com # Not required
   channels:
     ChannelName1: RedmineProjectId1
     ChannelName2: RedmineProjectId2
     ChannelName3: RedmineProjectId3
-
-redmine_example:
-  site: http://redmine.example.com
-  channels:
-    ChannelName1: RedmineProjectId1
-    ChannelName2: RedmineProjectId2
