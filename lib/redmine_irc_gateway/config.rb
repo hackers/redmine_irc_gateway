@@ -19,11 +19,16 @@ module RedmineIRCGateway
     end
 
     def user_config
-      get_enable_path "#{File.expand_path('~')}/.rig/#{@name}.yml"
+      user_config = "#{File.expand_path('~')}/.rig/#{@name}.yml"
+      if File.exist? user_config
+        user_config
+      else
+        false
+      end
     end
 
     def default_config
-      get_enable_path "#{File.expand_path('../../../config', __FILE__)}/#{@name}.yml"
+      "#{File.expand_path('../../../config', __FILE__)}/#{@name}.yml"
     end
 
     def save
@@ -33,12 +38,6 @@ module RedmineIRCGateway
           yaml[k] = v
         end
       end
-    end
-
-    private
-
-    def get_enable_path path
-      path if File.exist? path
     end
 
   end

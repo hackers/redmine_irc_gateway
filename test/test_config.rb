@@ -27,9 +27,5 @@ module RedmineIRCGateway
       assert_equal     test.big_project, 'super project'
     end
 
-    test 'Check config path' do
-      assert_kind_of String, Config.load.path
-    end
-
   end
 end
