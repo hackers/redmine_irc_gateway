@@ -19,7 +19,7 @@ module RedmineIRCGateway
 
       super
 
-      @user = User.start_session({ :nick => @nick, :key => @pass, :profile => @user })
+      @user = User.start_session(:nick => @nick, :key => @pass, :profile => @user)
 
       auto_join_to_channels
 
@@ -31,7 +31,7 @@ module RedmineIRCGateway
 
     # Receive message and response
     def on_privmsg m
-      message = Message.new({ :channel => m.params[0], :content => m.params[1] })
+      message = Message.new(:channel => m.params[0], :content => m.params[1])
 
       case message.channel
       when @console.name
