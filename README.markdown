@@ -40,9 +40,14 @@ How to use
 
 ### Make configuration file
 
-Rename configuration files
+Rename configuration file
 
-    mv config/config.yml.example config/config.yml
+    $ mv config/config.yml.example config/config.yml
+
+or
+
+    $ mkdir ~/.rig
+    $ mv config/config.yml.example ~/.rig/config.yml
 
 Edit config/config.yml or $HOME/.rig/config.yml
 
@@ -51,7 +56,6 @@ Edit config/config.yml or $HOME/.rig/config.yml
     channels:
         ChannelName: project id
         AwsomeProject: 777
-
 
 
 ### Run, and stay on top
