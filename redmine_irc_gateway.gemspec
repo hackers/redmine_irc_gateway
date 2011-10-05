@@ -6,22 +6,22 @@ Gem::Specification.new do |s|
   s.version     = RedmineIRCGateway::VERSION
   s.authors     = ['Tomohiro, TAIRA', 'Naoto, SHINGAKI', 'Yusaku, ONO']
   s.email       = ['tomohiro.t@gmail.com', 'n.shingaki@gmail.com']
-  s.homepage    = 'http://github.com/hackers/redmine_irc_gateway'
+  s.homepage    = 'https://github.com/hackers/redmine_irc_gateway'
   s.summary     = %q{Redmine IRC Gateway}
   s.description = %q{This project provides an access to Redmine API via IRC Gateway.}
 
   s.rubyforge_project = 'redmine_irc_gateway'
 
-  s.add_dependency 'rake'
-  s.add_dependency 'net-irc'
-  s.add_dependency 'activeresource'
-  s.add_dependency 'foreverb'
-  s.add_dependency 'slop'
-
-  s.add_development_dependency 'watchr'
-
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ['lib']
+
+  s.add_development_dependency 'rake'
+  s.add_development_dependency 'watchr'
+
+  s.add_runtime_dependency 'net-irc'
+  s.add_runtime_dependency 'activeresource'
+  s.add_runtime_dependency 'foreverb'
+  s.add_runtime_dependency 'slop'
 end
