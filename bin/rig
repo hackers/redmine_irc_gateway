@@ -1,9 +1,7 @@
 #!/usr/bin/env ruby
 
-$:.push File.expand_path('../../', __FILE__)
-require 'lib/redmine_irc_gateway'
-
-require 'rubygems'
+$:.push File.expand_path('../../lib', __FILE__)
+require 'redmine_irc_gateway'
 require 'forever'
 
 Forever.run do
