@@ -33,15 +33,8 @@ module RedmineIRCGateway
     def on_privmsg m
       message = Message.new(:channel => m.params[0], :content => m.params[1])
 
-      case message.channel
-      when @console.name
-        @console.talk(message).each do |response|
-          notice [@console.operator, message.channel, response]
-        end
-      else
-        talk message do |response|
-          notice response
-        end
+      talk message do |response|
+        notice response
       end
     end
 
@@ -61,10 +54,12 @@ module RedmineIRCGateway
     private
 
     def auto_join_to_channels
-      @console = Console.new
-      @main    = Channel.main
+      @main = Channel.main
+      join @main
 
-      ([@console, @main] + @user.channels.values).each { |channel| join channel }
+      @user.channels.values.each do |channel|
+        join channel
+      end
     rescue => e
       @log.error e
     end
@@ -94,7 +89,7 @@ module RedmineIRCGateway
     end
 
     def talk message
-      Command.exec(message.instruction).each do |issue|
+      Command.exec(message.command, message.id).each do |issue|
         yield [issue.speaker || @prefix.nick, message.channel, issue.content]
       end
     end
