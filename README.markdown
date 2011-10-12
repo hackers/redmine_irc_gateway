@@ -31,8 +31,15 @@ Installation
 
 2. Installing Ruby and libraries
 
+    RVM
+
         $ rvm install 1.9.2
         $ rake rig:development:setup
+
+    Bundler
+
+        $ bundle install --path vendor/bundle
+
 
 
 How to use
@@ -49,13 +56,7 @@ or
     $ mkdir ~/.rig
     $ mv config/config.yml.example ~/.rig/config.yml
 
-Edit config/config.yml or $HOME/.rig/config.yml
-
-    server:
-        site: ${REDMINE_URI}
-    channels:
-        ChannelName: project id
-        AwsomeProject: 777
+Edit config/config.yml or $HOME/.rig/config.yml. See `config/config.yml.example`.
 
 
 ### Run, and stay on top
@@ -65,6 +66,10 @@ Edit config/config.yml or $HOME/.rig/config.yml
 If you want to use debug mode, add the `--debug` option. like this.
 
     $ lib/redmine_irc_gateway.rb --debug
+
+#### Bundler
+
+    $ bundle exec ruby lib/redmine_irc_gateway.rb
 
 
 ### Process daemonize
