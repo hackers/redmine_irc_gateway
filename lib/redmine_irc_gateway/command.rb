@@ -13,20 +13,20 @@ module RedmineIRCGateway
       module_eval &block if block_given?
     end
 
-    def command(instruction, &block)
+    def command(command, &block)
       if block_given?
-        @commands[instruction.to_sym] = block
+        @commands[command.to_sym] = block
       else
         raise SyntaxError, 'No block given'
       end
     end
 
-    def exec instruction
-      unless @commands[instruction.to_sym]
+    def exec(command, id)
+      unless @commands[command.to_sym]
         raise NotImplementedError, 'Command not found'
       end
 
-      result = @commands[instruction.to_sym].call
+      result = @commands[command.to_sym].call(id)
 
       if result.empty?
         raise NotFoundError, 'Not found'
@@ -41,10 +41,41 @@ module RedmineIRCGateway
       @commands.keys.collect { |c| Message.new({ :content => c.to_s }) }
     end
 
-    def method_missing instruction
-      @commands[instruction.to_sym].call
+    def method_missing(command, *arguments)
+      @commands[command.to_sym].call(*arguments)
     rescue => e
       [Message.new({ :content => e.to_s })]
+    end
+
+    def build_issue_uri issue
+      Message.new({
+        :speaker     => issue.author.name.gsub(' ', ''),
+        :project_id  => issue.project.id,
+        :content     => issue.uri
+      })
+    end
+
+    def build_issue_description(issue, updated = false)
+      speaker = (updated ? issue.updated_by : (issue.assigned_to || issue.author)).name.gsub(' ', '')
+      reply_to = if issue.assigned_to and speaker != issue.assigned_to.name.gsub!(' ', '')
+                   ' @' + issue.assigned_to.name
+                 else
+                   nil
+                 end
+
+      prefix = ["4#{updated ? '»': '›'}", reply_to].join
+
+      Message.new({
+        :speaker     => speaker,
+        :project_id  => issue.project.id,
+        :content     => [
+                          prefix,
+                          "[#{issue.project.name} - #{issue.tracker.name}]",
+                          "(#{issue.status.name} #{issue.done_ratio}% : #{issue.priority.name})",
+                          issue.subject,
+                          "14(##{issue.id})"
+                         ].join(' ')
+      })
     end
 
   end
@@ -79,6 +110,10 @@ module RedmineIRCGateway
       end
     end
 
+    command :link do |id|
+      [build_issue_uri(Redmine::Issue.find(id))]
+    end
+
     command :me do
       Redmine::Issue.assigned_me.reverse.collect { |i| build_issue_description(i) }
     end
@@ -89,6 +124,12 @@ module RedmineIRCGateway
 
     command :reported do
       Redmine::Issue.reported.reverse.collect { |i| build_issue_description(i) }
+    end
+
+    command :project do
+      Redmine::User.current.projects.collect do |p|
+        Message.new({ :content => "[#{p.id}] #{p.name}" })
+      end
     end
 
   end

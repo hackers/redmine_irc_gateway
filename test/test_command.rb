@@ -18,6 +18,10 @@ module RedmineIRCGateway
         assert_equal 'Hello, World!', Command.hello_world
       end
 
+      test 'Show Issue link' do
+        assert_match /http:.+/, Command.link(Redmine::Issue.assigned_me.first.id).first.content
+      end
+
       test 'My issues' do
         assert_kind_of Array, Command.me
       end

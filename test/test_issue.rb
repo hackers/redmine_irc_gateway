@@ -34,6 +34,11 @@ module RedmineIRCGateway
         end
       end
 
+      test 'Find issue' do
+        i = Issue.assigned_me.first
+        assert_equal i.id, Issue.find(i.id).id
+      end
+
       test 'Check issue attributes' do
         i = Issue.assigned_me.first
 

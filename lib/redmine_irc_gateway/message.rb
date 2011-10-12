@@ -12,8 +12,12 @@ module RedmineIRCGateway
   #     puts m.channel # channel name
   class Message < OpenStruct
 
-    def instruction
-      content.downcase.to_sym
+    def command
+      content.split(' ').first.downcase.to_sym
+    end
+
+    def id
+      content.split(' ').last
     end
 
   end
