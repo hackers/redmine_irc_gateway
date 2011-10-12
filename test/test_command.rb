@@ -8,6 +8,16 @@ module RedmineIRCGateway
         assert_kind_of Array, Command.me
       end
 
+      test 'Check build description' do
+        watch_list = Redmine::Issue.watched
+        watch_list.each do |w|
+          desc = Command.build_issue_description(w)
+          user = w.assigned_to || w.author
+
+          assert_equal user.name.gsub(' ', ''), desc.speaker
+        end
+      end
+
       test 'Register command' do
         Command.register do
           command :hello_world do
