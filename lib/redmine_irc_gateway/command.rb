@@ -37,7 +37,7 @@ module RedmineIRCGateway
       [Message.new({ :content => e.to_s })]
     end
 
-    def help
+    def commands
       @commands.keys.collect { |c| Message.new({ :content => c.to_s }) }
     end
 
@@ -129,6 +129,21 @@ module RedmineIRCGateway
     command :project do
       Redmine::User.current.projects.collect do |p|
         Message.new({ :content => "[#{p.id}] #{p.name}" })
+      end
+    end
+
+    command :time do
+      Redmine::TimeEntry.recent_me.collect do |t|
+        issue = t.send(:issue) ? "(##{t.issue.id}) #{t.issue.subject}" : nil
+        Message.new(
+          { :content => "#{t.project.name} #{issue} #{t.activity.name} #{t.comments} #{t.hours}H" }
+        )
+      end
+    end
+
+    command :help do
+      Command.commands.collect do |c|
+        Message.new({ :content => c.content })
       end
     end
 

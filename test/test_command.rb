@@ -44,6 +44,10 @@ module RedmineIRCGateway
         assert_kind_of Array, Command.reported
       end
 
+      test 'My time entries' do
+        assert_kind_of Array, Command.time
+      end
+
       test 'Help' do
         assert_kind_of Array, Command.help
       end
