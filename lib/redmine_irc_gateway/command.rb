@@ -89,7 +89,7 @@ module RedmineIRCGateway
     # db[redmine issue id] = redmine issue datetime at update
     command :recent do
       begin
-        db = SDBM.open DB_PATH
+        db = SDBM.open "#{DB_PATH}.#{Redmine::API.session.nick}.#{Redmine::API.session.profile}"
         issues = []
         most_old_updated_on = db.values.first || Redmine::Issue.all.reverse.first.updated_on
 

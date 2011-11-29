@@ -7,14 +7,16 @@ module RedmineIRCGateway
 
       # override authorization_header method. add Redmine API key to header
       def authorization_header(http_method, uri)
-        { 'X-Redmine-API-Key' => RedmineIRCGateway::User.session.key }
+        { 'X-Redmine-API-Key' => API.session.key }
       end
 
     end
 
     class API < ActiveResource::Base
 
-      @@connections  = {}
+      cattr_accessor :session, :connections
+
+      self.connections  = {}
 
       self.logger       = Logger.new STDOUT
       self.logger.level = Logger::ERROR
@@ -31,12 +33,8 @@ module RedmineIRCGateway
 
       class << self
 
-        def profile
-          RedmineIRCGateway::User.session.profile
-        end
-
         # see [REST issues response with issue count limit and offset](http://www.redmine.org/issues/6140)
-        def inherited(child)
+        def inherited child
           child.headers['X-Redmine-Nometa'] = '1'
         end
 
@@ -46,29 +44,30 @@ module RedmineIRCGateway
         # The +refresh+ parameter toggles whether or not the \connection is refreshed at every request
         # or not (defaults to <tt>false</tt>).
         def connection(refresh = false)
-          if connection = @@connections[profile]
+          if connection = self.connections[session.profile]
             connection
           else
             begin
-              site = RedmineIRCGateway::Config.load.get(profile)['site'] || self.site
+              site = RedmineIRCGateway::Config.load.get(session.profile)['site'] || self.site
             rescue => e
               logger.info 'Use default site'
               site = self.site
             end
 
-            connection = Connection.new(site, format)
-            connection.proxy = proxy if proxy
-            connection.user = user if user
-            connection.password = password if password
-            connection.auth_type = auth_type if auth_type
-            connection.timeout = timeout if timeout
+            connection             = Connection.new(site, format)
+            connection.proxy       = proxy if proxy
+            connection.user        = user if user
+            connection.password    = password if password
+            connection.auth_type   = auth_type if auth_type
+            connection.timeout     = timeout if timeout
             connection.ssl_options = ssl_options if ssl_options
-            @@connections[profile] = connection
+
+            self.connections[session.profile] = connection
           end
         end
 
         def site
-          @@connections[profile].site + '/' rescue super
+          self.connections[session.profile].site + '/' rescue super
         end
 
         def all(params = nil)
