@@ -8,10 +8,10 @@ module RedmineIRCGateway
     end
 
     test 'Check main channel' do
-      main = Channel.main
+      timeline = Channel.timeline
 
-      assert_kind_of Channel, main
-      assert_equal  '#Redmine', main.name
+      assert_kind_of Channel, timeline
+      assert_equal  '#Redmine', timeline.name
     end
 
   end

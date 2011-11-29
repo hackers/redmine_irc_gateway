@@ -11,5 +11,6 @@ module RedmineIRCGateway
   end
 end
 
-login = { :nick => 'test', :profile => 'test', :key => 'ec8d7c27ca5f9266a434bd2f053f98fd5db58c28' }
-RedmineIRCGateway::User.start_session login
+account = { :nick => 'test', :profile => 'test', :key => 'ec8d7c27ca5f9266a434bd2f053f98fd5db58c28' }
+user = RedmineIRCGateway::User.start_session account
+user.connect_redmine

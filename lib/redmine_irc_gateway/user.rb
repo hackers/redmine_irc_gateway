@@ -1,25 +1,28 @@
 module RedmineIRCGateway
   class User
 
-    cattr_reader :session
     attr_reader  :nick, :key, :profile, :channels
 
     class << self
+
       def start_session params
         self.new params
       end
+
     end
 
-    def initialize(params)
+    def initialize params
       @nick    = params[:nick]
       @key     = params[:key]
       @profile = params[:profile]
+    end
 
-      @@session = self
+    def connect_redmine
+      Redmine::API.session = self
     end
 
     def channels
-      @channels ||= Channel.all
+      @channels ||= Channel.all_by_me self
     end
 
   end

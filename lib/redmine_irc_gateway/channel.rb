@@ -4,19 +4,22 @@ module RedmineIRCGateway
     attr_reader :name, :users, :project_id, :topic, :channels
 
     class << self
+
       # Return main channel instance
-      def main
+      def timeline
         self.new({ :name => :Redmine, :project_id => 0 })
       end
 
-      # Return my all channel instances
-      def all
-        self.new.list
+      # Return all channel instances
+      def all_by_me user
+        self.new({ :me => user }).list
       end
+
     end
 
     def initialize(params = nil)
       if params
+        @me         = params[:me]
         @name       = "##{params[:name]}"
         @users      = params[:users] || []
         @project_id = params[:project_id]
@@ -26,7 +29,7 @@ module RedmineIRCGateway
 
     # Return all channel names
     def names
-      config = Config.load.get(User.session.profile)
+      config = Config.load.get(@me.profile)
       config['channels'] rescue []
     end
 
@@ -47,11 +50,13 @@ module RedmineIRCGateway
     end
 
     # Return find or create channel instance
-    def get channel_name, project_id
+    def get(channel_name, project_id)
       channel = find project_id
       unless channel
-        project = Redmine::Project.find(project_id)
+        @me.connect_redmine
+        project = Redmine::Project.find project_id
         channel = Channel.new({
+          :me         => @me,
           :name       => channel_name,
           :project_id => project_id,
           :users      => project.members,
