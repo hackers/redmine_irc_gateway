@@ -23,8 +23,7 @@ module RedmineIRCGateway
 
       auto_join_to_channels
 
-      interval = 60
-      crawl_recent_issues(interval) do |issue|
+      crawl_recent_issues(get_crawl_interval) do |issue|
         privmsg issue
       end
 
@@ -53,6 +52,11 @@ module RedmineIRCGateway
     end
 
     private
+
+    def get_crawl_interval
+      config = RedmineIRCGateway::Config.load
+      interval = config.get(@user.profile)['interval'] || config.default['interval'] || 300
+    end
 
     def auto_join_to_channels
       @timeline = Channel.timeline
