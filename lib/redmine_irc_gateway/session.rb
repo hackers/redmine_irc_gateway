@@ -45,8 +45,11 @@ module RedmineIRCGateway
 
     # To clear the issue database on disconnect
     def on_disconnected
-      db = SDBM.open "#{DB_PATH}.#{@user.nick}.#{@user.profile}"
+      db_path = "#{DB_PATH}.#{@user.nick}.#{@user.profile}"
+      db = SDBM.open db_path
+
       db.clear
+      @log.info "Clear: #{db_path}"
       db.close
       @log.info 'Database cleared'
     end
