@@ -57,8 +57,9 @@ module RedmineIRCGateway
     private
 
     def get_crawl_interval
-      config = RedmineIRCGateway::Config.load
-      interval = config.get(@user.profile)['interval'] || config.default['interval'] || 300
+      config_load = RedmineIRCGateway::Config.load
+      config  = config_load.get(@user.profile) || config_load.default
+      interval = config['interval'] || 300
     end
 
     def auto_join_to_channels
