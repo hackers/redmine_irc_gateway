@@ -24,17 +24,12 @@ Installation
 
 ### Create development environment
 
-1. Clone git repo
+1. Clone Git repository
 
         $ git clone git@github.com:hackers/redmine_irc_gateway.git
         $ cd redmine_irc_gateway
 
-2. Installing Ruby and libraries
-
-    RVM
-
-        $ rvm install 1.9.2
-        $ rake rig:development:setup
+2. Installing RubyGems
 
     Bundler
 
@@ -76,16 +71,19 @@ If you want to use debug mode, add the `--debug` option. like this.
 
 #### Start
 
-    $ bin/rig start
+    $ bundle exec ./bin/rig start
 
 #### Stop
 
-    $ bin/rig stop
+    $ bundle exec ./bin/rig stop
 
 #### Restart
 
-    $ bin/rig restart
+    $ bundle exec ./bin/rig restart
 
+#### Kill
+
+    $ bundle exec ./bin/rig kill
 
 ### Cleaning environment
 
