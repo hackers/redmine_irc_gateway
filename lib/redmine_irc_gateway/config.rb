@@ -35,7 +35,7 @@ module RedmineIRCGateway
       yaml = YAML::Store.new @path
       yaml.transaction do
         self.table.each do |k, v|
-          yaml[k] = v
+          yaml[k.to_s] = v
         end
       end
     end

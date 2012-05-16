@@ -20,8 +20,10 @@ module RedmineIRCGateway
       super
 
       @user = User.start_session(:nick => @nick, :key => @pass, :profile => @user)
-
       auto_join_to_channels
+
+      @config_load = RedmineIRCGateway::Config.load
+      @config  = @config_load.get(@user.profile) || @config_load.default
 
       crawl_recent_issues(get_crawl_interval) do |issue|
         privmsg issue
@@ -40,26 +42,49 @@ module RedmineIRCGateway
 
     # Disallow join to a channel
     def on_join message
+      channel_name = message.params.first.gsub(/^#/,"")
+      if !@config['channels'].include?(channel_name)
+        @config['channels'][channel_name] = ""
+        @config_load.save
+        channel = Channel.new({
+          :me         => @user,
+          :name       => channel_name,
+          :project_id => "",
+          :users      => [],
+          :topic      => ""
+        })
+        join channel
+      end
       post(server_name, ERR_INVITEONLYCHAN, @nick, 'Invite only')
     end
 
     # To clear the issue database on disconnect
     def on_disconnected
-      db_path = "#{DB_PATH}.#{@user.nick}.#{@user.profile}"
-      db = SDBM.open db_path
+      #db_path = "#{DB_PATH}.#{@user.nick}.#{@user.profile}"
+      #db = SDBM.open db_path
 
-      db.clear
-      @log.info "Clear: #{db_path}"
-      db.close
-      @log.info 'Database cleared'
+      #db.clear
+      #@log.info "Clear: #{db_path}"
+      #db.close
+      #@log.info 'Database cleared'
+    end
+
+    def post(prefix, command, *params)
+      m = Net::IRC::Message.new(prefix, command, params.map {|s|
+        #s.gsub(/\r\n|[\r\n]/, " ")
+        s.tr("\r\n", " ")
+      })
+      @log.debug "SEND: #{m.to_s.chomp}"
+      @socket << m
+    rescue IOError => e
+      puts "Error #=> #{e}"
+      finish
     end
 
     private
 
     def get_crawl_interval
-      config_load = RedmineIRCGateway::Config.load
-      config  = config_load.get(@user.profile) || config_load.default
-      interval = config['interval'] || 300
+      interval = @config['interval'] || 300
     end
 
     def auto_join_to_channels
