@@ -1,9 +1,0 @@
-# https://github.com/travis-ci/travis-ci/wiki/.travis.yml-options
-bundler_args: --without development
-script: 'rake rig:test:all'
-
-rvm:
-  - 1.9.2
-
-notifications:
-  irc: "irc.freenode.org#rig"
