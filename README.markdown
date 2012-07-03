@@ -1,4 +1,4 @@
-Redmine IRC Gateway [![Build Status](https://secure.travis-ci.org/hackers/redmine_irc_gateway.png)](https://secure.travis-ci.org/hackers/redmine_irc_gateway) [![Still Maintained](http://stillmaintained.com/hackers/redmine_irc_gateway.png)](http://stillmaintained.com/hackers/redmine_irc_gateway)
+Redmine IRC Gateway [![Build Status](https://secure.travis-ci.org/Tomohiro/redmine_irc_gateway.png)](https://secure.travis-ci.org/Tomohiro/redmine_irc_gateway) [![Still Maintained](https://dl.dropbox.com/u/173097/github/stillmaintained.jpg)](http://stillmaintained.com/Tomohiro/redmine_irc_gateway)
 ================================================================================
 
 
@@ -15,7 +15,6 @@ Installation
 
 ### Requirements
 
-- RVM
 - Ruby 1.9.2+
 - RubyGems
     - Rake
@@ -26,7 +25,7 @@ Installation
 
 1. Clone Git repository
 
-        $ git clone git@github.com:hackers/redmine_irc_gateway.git
+        $ git clone git@github.com:Tomohiro/redmine_irc_gateway.git
         $ cd redmine_irc_gateway
 
 2. Installing RubyGems
@@ -109,8 +108,12 @@ Contributors
 - Yusaku, ONO [@yono](http://twitter.com/yono)
 
 
-LICENSE
--------------------------------------------------------------------------------
 
-This project is dual licensed under the MAHALO license or GPL Version 2 licenses.
+---
+
+LICENSE
+--------------------------------------------------------------------------------
+
+&copy; 2012 Tomohiro, TAIRA.
+This project is licensed under the MIT license.
 See LICENSE for details.
